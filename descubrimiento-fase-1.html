@@ -1,0 +1,625 @@
+<title>Descubrimiento Fase 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+/* Layout: recorrido vertical en el que la cámara 3D avanza por una doble hélice; cada estación es una sección con un panel de vidrio a un lado y un objeto molecular al otro. */
+:root{
+  --bg:#06080b; --bg2:#0c1218; --graphite:#151d26;
+  --line:rgba(190,215,240,.15); --line-strong:rgba(190,215,240,.28);
+  --fg:#e9eff6; --fg2:#aab8c6; --fg3:#8493a2;
+  --blue:#59c3ff; --mint:#4fe3b5; --lav:#b7a6ff;
+  --amber:#f5b94a; --rose:#ff7b8f; --slate:#8da3ba;
+  --glass:rgba(16,24,33,.5); --glass-soft:rgba(255,255,255,.045);
+  --f-display:'Sora','Segoe UI',system-ui,sans-serif;
+  --f-body:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1100px 700px at 85% -10%, rgba(89,195,255,.13), transparent 60%),
+    radial-gradient(900px 700px at -10% 45%, rgba(79,227,181,.08), transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 50%,var(--bg) 100%);
+  background-color:var(--bg);
+  color:var(--fg); font:400 16px/1.6 var(--f-body);
+  -webkit-font-smoothing:antialiased;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;display:block}
+main,.topbar{position:relative;z-index:2}
+a{color:var(--blue)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;letter-spacing:-.01em;text-wrap:balance;margin:0}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+
+/* top bar */
+.topbar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));
+  padding-block:10px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  background:rgba(8,12,17,.6);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;font:600 .9rem var(--f-display);min-width:0}
+.brand svg{flex:none}
+.brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phases{display:flex;align-items:center;gap:6px;flex:none}
+.phases i{width:18px;height:4px;border-radius:2px;background:var(--line-strong);display:block}
+.phases i.on{background:var(--blue);box-shadow:0 0 10px rgba(89,195,255,.7)}
+.phases small{font:400 .75rem var(--f-mono);color:var(--fg2);margin-left:6px}
+@media (max-width:520px){.phases i{width:10px}.phases small{display:none}}
+
+/* rail */
+.rail{position:fixed;right:max(14px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:6px}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:6px 4px;color:var(--fg3);font:500 .75rem var(--f-body)}
+.rail button span{opacity:0;transform:translateX(6px);transition:opacity .2s,transform .2s;white-space:nowrap;padding:3px 9px;border-radius:999px;background:rgba(10,15,21,.8);border:1px solid var(--line)}
+.rail button:hover span,.rail button:focus-visible span,.rail button.on span{opacity:1;transform:none;color:var(--fg)}
+.rail button b{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--fg3);display:block;transition:all .25s}
+.rail button.on b{background:var(--blue);border-color:var(--blue);box-shadow:0 0 12px var(--blue);transform:scale(1.25)}
+@media (max-width:980px){.rail{display:none}}
+
+/* stations */
+.station{padding-block:12vh;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+.station.hero{padding-block:7vh 12vh}
+.wrap{max-width:1240px;margin-inline:auto}
+.col{width:min(100%,780px)}
+.station:nth-of-type(even) .col{margin-left:auto}
+@media (max-width:980px){.station:nth-of-type(even) .col{margin-left:0}}
+
+/* glass */
+.glass{
+  position:relative;border-radius:26px;padding:clamp(20px,3.2vw,36px);
+  background:linear-gradient(140deg,rgba(255,255,255,.1),rgba(255,255,255,.025) 45%,rgba(89,195,255,.04)),var(--glass);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);backdrop-filter:blur(24px) saturate(150%);
+  border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(255,255,255,.04),0 40px 80px -30px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.25);
+  transform:perspective(1300px) rotateX(calc(var(--sx,0deg) + var(--rx,0deg))) rotateY(var(--ry,0deg));
+  transform-style:flat;will-change:transform;transition:transform .25s ease-out;
+  display:flex;flex-direction:column;gap:20px;
+}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(420px 260px at var(--mx,20%) var(--my,0%),rgba(150,220,255,.16),transparent 70%)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass{background:rgba(14,21,29,.92)}}
+.soft{background:var(--glass-soft);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+
+.k{font:500 .8rem var(--f-body);color:var(--blue);letter-spacing:.02em}
+h1{font-size:clamp(2rem,4.6vw,3.5rem);line-height:1.08}
+h2{font-size:clamp(1.55rem,3vw,2.2rem);line-height:1.15}
+h3{font-size:1.05rem;line-height:1.3}
+.lead{font-size:1.1rem;color:var(--fg2);max-width:60ch}
+.muted{color:var(--fg2)}
+.small{font-size:.875rem;color:var(--fg2)}
+
+/* tags */
+.tag{display:inline-flex;align-items:center;gap:6px;font:500 .75rem/1 var(--f-body);padding:5px 10px;border-radius:999px;border:1px solid;white-space:nowrap}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.t-hecho{color:var(--blue);background:rgba(89,195,255,.1);border-color:rgba(89,195,255,.35)}
+.t-hip{color:var(--lav);background:rgba(183,166,255,.1);border-color:rgba(183,166,255,.35)}
+.t-rec{color:var(--mint);background:rgba(79,227,181,.1);border-color:rgba(79,227,181,.35)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.legend p{font-size:.85rem;color:var(--fg2)}
+
+/* hero */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:400 .8rem var(--f-mono);color:var(--fg2);padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.steps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;font-size:.72rem;line-height:1.25;color:var(--fg3);padding-top:10px;border-top:3px solid var(--line-strong);position:relative}
+.steps li::before{content:counter(s);display:block;font:400 .7rem var(--f-mono);margin-bottom:2px}
+.steps li.now{color:var(--fg);border-top-color:var(--blue);box-shadow:0 -8px 16px -10px var(--blue)}
+.steps li.now::after{content:"estamos aquí";display:block;color:var(--blue);margin-top:2px}
+@media (max-width:640px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* lists */
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.list li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.list li>.tag{margin-top:2px}
+.list li>div{min-width:0}
+.list strong{font-weight:600}
+
+/* models */
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.model{display:flex;flex-direction:column;gap:12px;min-width:0}
+.model>.tag{align-self:flex-start}
+.model h3{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.model h3 b{font:500 .8rem var(--f-mono);color:var(--blue)}
+.model ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;color:var(--fg2);font-size:.92rem}
+.model ul strong{color:var(--fg);font-weight:500}
+.gate{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line-strong);font-size:.88rem}
+.gate b{color:var(--amber);font-weight:600}
+
+/* viability */
+.vgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.vgrid{grid-template-columns:1fr}}
+.v{display:flex;flex-direction:column;gap:10px;min-width:0}
+.v h3{font-size:.98rem}
+.v p{font-size:.88rem;color:var(--fg2)}
+.v .row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.meter{display:flex;gap:3px}
+.meter i{width:22px;height:6px;border-radius:3px;background:rgba(255,255,255,.1);display:block}
+.lv{font:500 .76rem var(--f-body)}
+.lv-ok{color:var(--mint)}.lv-ok .meter i.on{background:var(--mint);box-shadow:0 0 8px rgba(79,227,181,.6)}
+.lv-mid{color:var(--amber)}.lv-mid .meter i.on{background:var(--amber);box-shadow:0 0 8px rgba(245,185,74,.6)}
+.lv-crit{color:var(--rose)}.lv-crit .meter i.on{background:var(--rose);box-shadow:0 0 8px rgba(255,123,143,.6)}
+.vstat{display:flex;align-items:center;gap:10px}
+
+/* risks */
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;font:500 .85rem var(--f-body);padding:8px 14px;border-radius:999px;border:1px solid var(--line-strong);color:var(--fg2);background:rgba(255,255,255,.04);transition:all .2s}
+.btn:hover{color:var(--fg);border-color:var(--blue)}
+.btn[aria-pressed="true"],.btn.on{color:#04121b;background:var(--blue);border-color:var(--blue);font-weight:600}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.btn.ghost[disabled]{opacity:.4;cursor:default}
+.risks{display:flex;flex-direction:column;gap:10px}
+.risk{display:grid;grid-template-columns:5px 1fr;gap:14px;padding:0;overflow:hidden;min-width:0}
+.risk .bar{background:var(--slate)}
+.risk.s-crit .bar{background:var(--rose);box-shadow:0 0 16px var(--rose)}
+.risk.s-alto .bar{background:var(--amber)}
+.risk .body{padding:14px 16px 14px 0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.risk .head{display:flex;gap:10px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+.sev{font:500 .75rem var(--f-body);color:var(--fg2)}
+.s-crit .sev{color:var(--rose)}.s-alto .sev{color:var(--amber)}
+.risk p{font-size:.9rem;color:var(--fg2)}
+.risk p b{color:var(--mint);font-weight:500}
+
+/* questions */
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tab{all:unset;cursor:pointer;box-sizing:border-box;display:flex;align-items:center;gap:8px;font:500 .82rem var(--f-body);padding:8px 12px;border-radius:12px;border:1px solid var(--line);color:var(--fg2);background:rgba(255,255,255,.03);transition:all .2s}
+.tab b{font:400 .75rem var(--f-mono);color:var(--fg3)}
+.tab:hover{border-color:var(--blue);color:var(--fg)}
+.tab[aria-selected="true"]{color:var(--fg);border-color:var(--blue);background:rgba(89,195,255,.14)}
+.tab[aria-selected="true"] b{color:var(--blue)}
+.tab:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.qpanel{display:flex;flex-direction:column;gap:14px}
+.qpanel h3{font-size:1.2rem}
+.qs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.qs li{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.qs li span{font:400 .75rem var(--f-mono);color:var(--blue);padding-top:3px}
+.qs li p{min-width:0}
+.qnav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.now-pill{font:500 .75rem var(--f-body);color:var(--mint)}
+
+/* research */
+.rgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.rgrid{grid-template-columns:1fr}}
+.r{display:flex;flex-direction:column;gap:8px;min-width:0}
+.r .row{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.r .cat{font:500 .75rem var(--f-body);color:var(--blue)}
+.r .st{font:400 .72rem var(--f-mono);color:var(--amber)}
+.r p{font-size:.88rem;color:var(--fg2)}
+.r .src{font-size:.8rem;color:var(--fg3);padding-top:8px;border-top:1px solid var(--line)}
+.r .src b{color:var(--fg2);font-weight:500}
+
+/* checklist */
+.checks{display:flex;flex-direction:column;gap:8px}
+.chk{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;min-height:48px}
+.chk input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--fg3);background:transparent;display:grid;place-items:center;cursor:pointer;margin:0}
+.chk input::after{content:"";width:10px;height:6px;border-left:2px solid #04121b;border-bottom:2px solid #04121b;transform:rotate(-45deg) translate(1px,-1px);opacity:0}
+.chk input:checked{background:var(--mint);border-color:var(--mint)}
+.chk input:checked::after{opacity:1}
+.chk:has(input:checked) span{color:var(--fg2);text-decoration:line-through;text-decoration-color:var(--fg3)}
+.chk input:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.prog{height:6px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--mint));transition:width .4s}
+.foot{padding:40px max(16px,env(safe-area-inset-left,0px)) 60px;text-align:center;color:var(--fg3);font-size:.82rem}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .glass{transition:none}
+  *{animation:none!important}
+}
+@media (max-width:640px){.glass{border-radius:20px}}
+</style>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header class="topbar">
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 3c0 6 14 6 14 12s-14 6-14 6M19 3c0 6-14 6-14 12" stroke="#59c3ff" stroke-width="1.6" stroke-linecap="round"/><path d="M7 7h10M7 17h10" stroke="#4fe3b5" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>
+    <span>Proyecto sin nombre</span>
+  </div>
+  <div class="phases" role="img" aria-label="Fase 1 de 7">
+    <i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><small>Fase 1 de 7</small>
+  </div>
+</header>
+
+<nav class="rail" id="rail" aria-label="Estaciones del recorrido"></nav>
+
+<main>
+
+<!-- 0 · inicio -->
+<section class="station hero" id="inicio" data-label="Inicio">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <p class="k">Plataforma digital de péptidos, SARMs y anabólicos</p>
+      <h1>Antes de construir, hay que saber qué se puede vender y qué solo se puede explicar</h1>
+      <p class="lead">Este es el documento de descubrimiento. Reúne el resumen del proyecto, los dos modelos de negocio, la viabilidad preliminar, los riesgos y las preguntas que necesito que me respondas. Todavía no hay arquitectura ni código.</p>
+      <div class="chips"><span class="chip">sin código</span><span class="chip">sin marca aprobada</span><span class="chip">regulación sin verificar</span></div>
+      <ol class="steps" aria-label="Fases del proyecto">
+        <li class="now">Descubrimiento</li><li>Investigación</li><li>Arquitectura</li><li>Diseño UX/UI</li><li>Desarrollo</li><li>Pruebas</li><li>Lanzamiento</li>
+      </ol>
+      <p class="small">Recorre la página con el scroll o con los puntos del costado. La cámara avanza a lo largo de una hélice de ADN, que es solo ambientación.</p>
+    </div>
+  </div></div>
+</section>
+
+<!-- 1 · resumen -->
+<section class="station" id="resumen" data-label="Resumen">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Resumen ejecutivo</h2>
+      <div class="legend">
+        <span class="tag t-hecho">Hecho</span><span class="tag t-hip">Hipótesis</span><span class="tag t-rec">Recomendación</span>
+        <p>Hecho es lo que dijiste en el brief. Todavía no consulté fuentes oficiales, así que lo regulatorio es hipótesis hasta la Fase 2.</p>
+      </div>
+      <ul class="list">
+        <li><span class="tag t-hecho">Hecho</span><div><strong>Qué es.</strong> Una plataforma web sobre péptidos, SARMs y esteroides anabólico-androgénicos, con tono científico y una audiencia mixta, desde quien empieza a investigar hasta profesionales de salud.</div></li>
+        <li><span class="tag t-hecho">Hecho</span><div><strong>Dos objetivos.</strong> Explorar la comercialización donde sea legal y generar clientes potenciales con contenido educativo, fichas, directorio y formularios.</div></li>
+        <li><span class="tag t-hecho">Hecho</span><div><strong>Líneas rojas que fijaste.</strong> Sin dosis, ciclos ni protocolos. Sin afirmaciones médicas sin respaldo. Sin funciones que faciliten vender sustancias controladas o no autorizadas. Educación y oferta comercial siempre separadas.</div></li>
+        <li><span class="tag t-hecho">Hecho</span><div><strong>Mercado de referencia.</strong> México, porque pediste investigar su regulación. Falta confirmar si hay otros países.</div></li>
+        <li><span class="tag t-hip">Hipótesis</span><div><strong>Dónde está el valor.</strong> En la credibilidad editorial: fuentes, autoría experta y transparencia. Eso es difícil de copiar y es lo que Google exige en temas de salud.</div></li>
+        <li><span class="tag t-rec">Recomendación</span><div><strong>Cómo plantearlo.</strong> Tratar el proyecto como un medio científico que capta contactos, y dejar la venta como una opción que se activa solo si la investigación legal la permite.</div></li>
+      </ul>
+    </div>
+  </div></div>
+</section>
+
+<!-- 2 · modelos -->
+<section class="station" id="modelos" data-label="Modelos">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Los dos modelos de negocio</h2>
+      <div class="two">
+        <article class="soft model">
+          <h3><b>A</b> Comercialización</h3>
+          <p class="small">Presentar y, si procede, vender productos del sector. Solo cuando sean legales, estén autorizados y cumplan los requisitos sanitarios.</p>
+          <ul>
+            <li><strong>Regla.</strong> Que un proveedor lo ofrezca no prueba que se pueda vender.</li>
+            <li><strong>Variantes a evaluar.</strong> Productos con registro sanitario vigente, derivación a establecimientos con licencia, servicios profesionales, o ninguna venta.</li>
+            <li><strong>Ingreso posible.</strong> Margen por venta o comisión por derivación.</li>
+          </ul>
+          <p class="gate"><b>Puerta.</b> Dictamen legal por producto antes de diseñar carrito, precios o cobros.</p>
+          <span class="tag t-hip">Hipótesis</span>
+        </article>
+        <article class="soft model">
+          <h3><b>B</b> Generación de clientes</h3>
+          <p class="small">Atraer visitantes con contenido de calidad y convertirlos en contactos que alguien pueda atender.</p>
+          <ul>
+            <li><strong>Piezas.</strong> Fichas de compuestos, biblioteca científica, glosario, comparador informativo, directorio y formularios.</li>
+            <li><strong>Ingreso posible.</strong> Cuota por contactos entregados a profesionales, suscripciones o patrocinios con reglas claras.</li>
+            <li><strong>Falta definir.</strong> Quién es el cliente que paga por esos contactos.</li>
+          </ul>
+          <p class="gate"><b>Puerta.</b> Política editorial escrita antes del primer artículo.</p>
+          <span class="tag t-hip">Hipótesis</span>
+        </article>
+      </div>
+      <div class="soft">
+        <p><span class="tag t-rec">Recomendación</span></p>
+        <p style="margin-top:8px">Los modelos no pesan igual. B puede sostenerse solo y construye la audiencia. A depende de esa audiencia y, si se ejecuta mal, puede cerrar cuentas, anuncios y hosting de todo el proyecto. Propongo construir B primero y mantener A como opción condicionada.</p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 3 · viabilidad -->
+<section class="station" id="viabilidad" data-label="Viabilidad">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Viabilidad preliminar</h2>
+      <p class="muted">Una lectura por componente. El medidor es cualitativo y refleja mi criterio actual, no un cálculo. Cambiará con la investigación de la Fase 2.</p>
+      <div class="vgrid" id="vgrid"></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 4 · riesgos -->
+<section class="station" id="riesgos" data-label="Riesgos">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Riesgos y restricciones</h2>
+      <p class="muted">Ordenados por gravedad. Cada uno trae la mitigación que recomiendo. Filtra para ver solo los que más pesan.</p>
+      <div class="filters" id="rfilters" role="group" aria-label="Filtrar por gravedad">
+        <button class="btn" type="button" data-f="all" aria-pressed="true">Todos</button>
+        <button class="btn" type="button" data-f="crit" aria-pressed="false">Críticos</button>
+        <button class="btn" type="button" data-f="alto" aria-pressed="false">Altos</button>
+        <button class="btn" type="button" data-f="medio" aria-pressed="false">Medios</button>
+      </div>
+      <div class="risks" id="risks"></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 5 · preguntas -->
+<section class="station" id="preguntas" data-label="Preguntas">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Lo que necesito saber</h2>
+      <p class="muted">Siete grupos de preguntas, uno por tema. Las voy a hacer en orden en el chat, empezando por el grupo 1. Aquí puedes ver todas de antemano.</p>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Grupos de preguntas"></div>
+      <div class="qpanel" id="qpanel" role="tabpanel" aria-live="polite"></div>
+      <div class="qnav">
+        <button class="btn ghost" type="button" id="qprev">Grupo anterior</button>
+        <button class="btn" type="button" id="qnext">Grupo siguiente</button>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 6 · investigación -->
+<section class="station" id="investigacion" data-label="Investigación">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Qué hay que investigar antes de avanzar</h2>
+      <p class="muted">Es la agenda de la Fase 2. Cada punto se resolverá con fuentes primarias y oficiales, y las conclusiones quedarán citadas.</p>
+      <div class="rgrid" id="rgrid"></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 7 · aprobación -->
+<section class="station" id="aprobacion" data-label="Aprobación">
+  <div class="wrap"><div class="col">
+    <div class="glass" data-tilt>
+      <h2>Para cerrar el descubrimiento</h2>
+      <p class="muted">Pasamos a la Fase 2 cuando estos puntos estén resueltos y lo apruebes de forma explícita. Marca lo que ya consideres cubierto.</p>
+      <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+      <div class="checks" id="checks"></div>
+      <p class="small" id="progtxt"></p>
+    </div>
+  </div></div>
+</section>
+
+</main>
+<p class="foot">Documento de trabajo. No constituye asesoría legal ni médica. Lo regulatorio está pendiente de verificación con fuentes oficiales.</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- datos ---------- */
+var VIAB=[
+ {t:'Medio educativo: fichas, biblioteca y glosario',l:'ok',m:3,g:'rec',d:'Viable si cada ficha cita fuentes, tiene un revisor identificado y no incluye dosis, ciclos ni protocolos.'},
+ {t:'Directorio de profesionales de salud',l:'ok',m:3,g:'hip',d:'Viable si cada profesional se verifica (cédula, especialidad) y el directorio no promete resultados.'},
+ {t:'Posicionamiento orgánico (SEO)',l:'mid',m:2,g:'hip',d:'Es el canal natural. Los temas de salud exigen autoría experta, fuentes y actualización constante. La competencia está por medir.'},
+ {t:'Formularios y consultas comerciales',l:'mid',m:2,g:'rec',d:'Pueden volverse un canal de venta informal. Necesitan política de uso, moderación y aviso de privacidad.'},
+ {t:'Directorio de proveedores',l:'mid',m:2,g:'hip',d:'Listar a quien vende sustancias no autorizadas podría leerse como promoción de su venta. Solo avanzaría con entidades verificables y con licencia.'},
+ {t:'Anuncios de pago',l:'mid',m:1,g:'hip',d:'Las redes publicitarias suelen restringir esta categoría. Hay que leer sus políticas vigentes antes de contar con ellas.'},
+ {t:'Cobros en línea',l:'crit',m:1,g:'hip',d:'Los procesadores de pago limitan categorías de salud y sustancias reguladas. Sin confirmación escrita no hay modelo de ingresos.'},
+ {t:'Venta directa de productos',l:'crit',m:1,g:'hip',d:'No se diseña nada hasta tener dictamen legal por producto. Para parte del catálogo imaginado, la respuesta podría ser que no.'}
+];
+var LV={ok:'Viable con condiciones',mid:'Condicionado',crit:'Bloqueado hasta confirmar'};
+var TG={hecho:'Hecho',hip:'Hipótesis',rec:'Recomendación'};
+
+var RISK=[
+ {s:'crit',t:'Comercializar sustancias controladas o no autorizadas',d:'Consecuencias sanitarias y penales, además del cierre de cuentas y dominios.',m:'Ninguna función comercial sin dictamen legal. El catálogo comercial sería una lista blanca verificada producto por producto.'},
+ {s:'crit',t:'Contenido que funcione como guía de uso',d:'Dosis, ciclos o protocolos, incluso en comentarios o formularios, pueden dañar a lectores y generar responsabilidad.',m:'Política editorial escrita, revisión previa y moderación de cualquier contenido enviado por usuarios.'},
+ {s:'alto',t:'Publicidad y promoción restringidas',d:'La ley sanitaria regula qué se puede decir sobre medicamentos y productos para la salud (hipótesis por verificar).',m:'Revisión de cada afirmación, separación visible entre educación y oferta, y consulta de los permisos aplicables.'},
+ {s:'alto',t:'Dependencia de pagos, hosting y anuncios',d:'Un proveedor puede suspender el servicio por política, sin aviso, y dejar el proyecto sin cobros o sin sitio.',m:'Leer términos antes de elegir proveedores y evitar depender de uno solo.'},
+ {s:'alto',t:'Directorio de proveedores',d:'Quien lista a un proveedor puede quedar asociado a lo que ese proveedor vende.',m:'Admitir solo entidades con licencia verificable y publicar los criterios de admisión.'},
+ {s:'alto',t:'Hipótesis presentadas como hechos',d:'En SARMs y varios péptidos, buena parte de la evidencia puede ser preclínica o limitada (por verificar compuesto por compuesto).',m:'Etiquetar el nivel de evidencia en cada afirmación y citar la fuente primaria.'},
+ {s:'medio',t:'Datos de salud en formularios',d:'Los datos de salud son datos sensibles y exigen tratamiento y aviso de privacidad adecuados.',m:'Pedir solo lo indispensable y revisar la ley de protección de datos vigente.'},
+ {s:'medio',t:'Posicionamiento en temas de salud',d:'Google aplica criterios más estrictos a contenido que puede afectar la salud: autoría, fuentes y actualización.',m:'Autores con credenciales, revisor visible, fechas de revisión y bibliografía en cada ficha.'},
+ {s:'medio',t:'Menores y personas vulnerables',d:'El tema atrae a jóvenes y a personas con presión por la imagen corporal.',m:'Aviso de mayoría de edad, tono sobrio y enlaces a recursos de salud.'},
+ {s:'medio',t:'Antidopaje y reputación',d:'Estas sustancias suelen estar prohibidas en competencia deportiva (por verificar en la lista oficial).',m:'Advertencia clara en las fichas y referencia a la lista antidopaje vigente.'},
+ {s:'medio',t:'Costo y tiempo de la revisión experta',d:'La calidad científica depende de revisores, y eso limita cuánto contenido se puede publicar.',m:'Planear un ritmo editorial realista y priorizar fichas por demanda.'}
+];
+var SEVL={crit:'Crítico',alto:'Alto',medio:'Medio'};
+
+var QG=[
+ {n:'Negocio y objetivos',q:['¿Qué resultado mediría el éxito a 12 meses: ingresos, número de contactos, autoridad de marca u otro?','En el modelo B, ¿quién es el cliente que paga por los contactos: profesionales, clínicas, tú mismo?','¿Parte de un negocio o una red de contactos que ya existe, o empieza de cero?','¿Qué presupuesto y plazo aproximados manejas para las fases 2 a 5?','Si la investigación concluye que no se puede vender, ¿el proyecto sigue valiendo la pena como medio editorial?']},
+ {n:'Mercado y jurisdicción',q:['¿México es el único mercado, o también otros países?','¿Quién sería el titular del sitio: persona física o empresa, y en qué país?','¿Hay RFC y régimen fiscal definidos?','¿Solo en español?','¿Hay envíos físicos previstos?']},
+ {n:'Oferta comercial',q:['¿Qué productos tienes en mente? Una lista tentativa basta.','¿Tienes proveedores y puedes mostrar sus licencias o registros sanitarios?','¿Has consultado a un abogado de salud o regulatorio?','¿Qué entiendes por servicios relacionados en la captación de clientes?','¿Aceptarías limitar la parte comercial a productos con registro sanitario o a derivación a establecimientos con licencia?']},
+ {n:'Audiencia y contenido',q:['¿A quién priorizas: principiantes, fitness y culturismo, o profesionales?','¿Quién escribiría y quién revisaría los contenidos? ¿Hay acceso a médicos, farmacólogos o químicos?','¿Prefieres divulgación o fichas con literatura primaria?','¿Habrá comentarios, foros o comunidad?','¿Qué temas son líneas rojas editoriales para ti?']},
+ {n:'Marca y competencia',q:['¿Qué sitios te gustan y cuáles no, visual y editorialmente?','¿Conoces competidores en México o Latinoamérica?','¿Tienes nombre o dominio tentativo?','¿La marca sería personal o corporativa?','¿Qué tono buscas: clínico, divulgativo o de comunidad?']},
+ {n:'Operación y técnica',q:['¿Quién administrará el sitio a diario y con qué nivel técnico?','¿Ya contrataste hosting, dominio o herramientas que debamos respetar?','¿Quieres integrar correo, CRM o WhatsApp?','¿Qué volumen de visitas esperas o buscas?','¿El proyecto vivirá en este repositorio u otro?']},
+ {n:'Límites y riesgo',q:['¿Qué nivel de riesgo legal estás dispuesto a asumir?','¿Hay decisiones que no estás dispuesto a cambiar?','¿Aceptas descartar secciones, como el comparador, si implican riesgo?']}
+];
+
+var RES=[
+ {c:'Regulación',t:'Estatus por sustancia en México',d:'Cuáles son medicamentos con registro, cuáles sustancias controladas y cuáles no tienen autorización. Una tabla por sustancia, no por categoría.',s:'Ley General de Salud y reglamentos, listados de COFEPRIS, Diario Oficial de la Federación'},
+ {c:'Regulación',t:'Publicidad y promoción',d:'Qué se puede decir, dónde y con qué permisos al hablar de medicamentos o productos para la salud.',s:'Reglamento de la Ley General de Salud en materia de publicidad, COFEPRIS'},
+ {c:'Comercio y fiscal',t:'Venta en línea, consumidor e impuestos',d:'Obligaciones de un comercio electrónico: información al consumidor, devoluciones, facturación y reglas para plataformas digitales.',s:'PROFECO, Ley Federal de Protección al Consumidor, SAT'},
+ {c:'Datos',t:'Protección de datos personales',d:'Los formularios con datos de salud son sensibles. Verificar la ley vigente y sus reformas recientes.',s:'Ley Federal de Protección de Datos Personales y autoridad competente'},
+ {c:'Plataformas',t:'Políticas de pagos, anuncios y hosting',d:'Lectura de términos de procesadores de pago, redes publicitarias, hosting y correo.',s:'Políticas oficiales publicadas por cada proveedor'},
+ {c:'Ciencia',t:'Estado de la evidencia por compuesto',d:'Ensayos, revisiones y efectos adversos documentados, separando estudios en humanos, en animales y en células.',s:'PubMed, ClinicalTrials.gov, agencias regulatorias como FDA y EMA'},
+ {c:'Deporte',t:'Antidopaje',d:'Situación de estas sustancias en las listas antidopaje, relevante para la audiencia de fitness y competencia.',s:'Lista de sustancias prohibidas de la Agencia Mundial Antidopaje'},
+ {c:'Mercado',t:'Competidores y demanda de búsqueda',d:'Quién ocupa hoy estos temas en español, con qué calidad y qué intención de búsqueda predomina.',s:'Análisis de resultados de búsqueda y herramientas de palabras clave'}
+];
+
+var EXIT=['Objetivo de negocio y métrica de éxito definidos','Mercado y jurisdicción confirmados','Postura frente a la venta acordada (condicionada a la investigación legal)','Líneas rojas editoriales acordadas por escrito','Presupuesto y plazo orientativos','Respuestas de los grupos 1 a 3 como mínimo','Aprobación explícita del descubrimiento'];
+
+/* ---------- render ---------- */
+function $(s,r){return (r||document).querySelector(s)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+$('#vgrid').innerHTML=VIAB.map(function(v){
+  var seg='';for(var i=0;i<4;i++)seg+='<i'+(i<v.m?' class="on"':'')+'></i>';
+  return '<article class="soft v lv-'+v.l+'"><h3>'+esc(v.t)+'</h3><div class="row"><div class="vstat"><span class="meter" aria-hidden="true">'+seg+'</span><span class="lv">'+LV[v.l]+'</span></div><span class="tag t-'+v.g+'">'+TG[v.g]+'</span></div><p>'+esc(v.d)+'</p></article>';
+}).join('');
+
+$('#risks').innerHTML=RISK.map(function(r){
+  return '<article class="soft risk s-'+r.s+'" data-s="'+r.s+'"><div class="bar"></div><div class="body"><div class="head"><h3>'+esc(r.t)+'</h3><span class="sev">'+SEVL[r.s]+'</span></div><p>'+esc(r.d)+'</p><p><b>Mitigación.</b> '+esc(r.m)+'</p></div></article>';
+}).join('');
+$('#rfilters').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-f]');if(!b)return;
+  var f=b.getAttribute('data-f');
+  [].forEach.call(this.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+  [].forEach.call(document.querySelectorAll('.risk'),function(r){r.hidden=!(f==='all'||r.getAttribute('data-s')===f)});
+  measure();
+});
+
+var qi=0;
+function renderQ(){
+  var g=QG[qi];
+  $('#tabs').innerHTML=QG.map(function(x,i){return '<button class="tab" role="tab" type="button" data-i="'+i+'" aria-selected="'+(i===qi)+'"><b>G'+(i+1)+'</b>'+esc(x.n)+'</button>'}).join('');
+  $('#qpanel').innerHTML='<h3>Grupo '+(qi+1)+': '+esc(g.n)+'</h3>'+(qi===0?'<span class="now-pill">Empezamos por aquí. Respóndelas en el chat.</span>':'')+'<ol class="qs">'+g.q.map(function(q,i){return '<li><span>'+(qi+1)+'.'+(i+1)+'</span><p>'+esc(q)+'</p></li>'}).join('')+'</ol>';
+  $('#qprev').disabled=qi===0;$('#qnext').disabled=qi===QG.length-1;
+  $('#qprev').classList.toggle('ghost',true);
+  measure();
+}
+$('#tabs').addEventListener('click',function(e){var b=e.target.closest('.tab');if(!b)return;qi=+b.getAttribute('data-i');renderQ()});
+$('#qprev').addEventListener('click',function(){if(qi>0){qi--;renderQ()}});
+$('#qnext').addEventListener('click',function(){if(qi<QG.length-1){qi++;renderQ()}});
+renderQ();
+
+$('#rgrid').innerHTML=RES.map(function(r){
+  return '<article class="soft r"><div class="row"><span class="cat">'+esc(r.c)+'</span><span class="st">pendiente</span></div><h3>'+esc(r.t)+'</h3><p>'+esc(r.d)+'</p><p class="src"><b>Fuente prevista.</b> '+esc(r.s)+'</p></article>';
+}).join('');
+
+var saved=[];try{saved=JSON.parse(localStorage.getItem('desc-fase1-exit')||'[]')}catch(e){}
+$('#checks').innerHTML=EXIT.map(function(t,i){return '<label class="chk" for="ck'+i+'"><input type="checkbox" id="ck'+i+'"'+(saved.indexOf(i)>-1?' checked':'')+'><span>'+esc(t)+'</span></label>'}).join('');
+function updProg(){
+  var boxes=[].slice.call(document.querySelectorAll('#checks input')),n=boxes.filter(function(b){return b.checked}).length;
+  $('#progbar').style.width=(n/boxes.length*100)+'%';
+  $('#progtxt').textContent=n+' de '+boxes.length+' puntos cubiertos'+(n===boxes.length?'. Listos para pasar a la Fase 2.':'.');
+  try{localStorage.setItem('desc-fase1-exit',JSON.stringify(boxes.map(function(b,i){return b.checked?i:-1}).filter(function(i){return i>-1})))}catch(e){}
+}
+$('#checks').addEventListener('change',updProg);updProg();
+
+/* rail */
+var secs=[].slice.call(document.querySelectorAll('.station'));
+$('#rail').innerHTML=secs.map(function(s,i){return '<button type="button" data-i="'+i+'" aria-label="'+s.getAttribute('data-label')+'"><span>'+s.getAttribute('data-label')+'</span><b></b></button>'}).join('');
+$('#rail').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;secs[+b.getAttribute('data-i')].scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})});
+
+/* ---------- 3D ---------- */
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+var centers=[];
+function measure(){if(!secs)return;centers=secs.map(function(s){var r=s.getBoundingClientRect();return r.top+window.scrollY+r.height/2})}
+function frac(y){
+  var n=centers.length;if(!n||y<=centers[0])return 0;
+  for(var i=0;i<n-1;i++){if(y<centers[i+1])return i+(y-centers[i])/(centers[i+1]-centers[i])}
+  return n-1;
+}
+window.addEventListener('resize',measure);window.addEventListener('load',measure);measure();
+
+var scene3d=(function(){
+  var canvas=$('#gl');
+  try{
+    if(!window.THREE)throw new Error('three');
+    var T=THREE,S=40,N=secs.length;
+    var renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,innerWidth<700?1.5:2));
+    renderer.setClearColor(0x000000,0);
+    var scene=new T.Scene();
+    scene.fog=new T.Fog(0x06080b,16,105);
+    var camera=new T.PerspectiveCamera(60,1,.1,200);
+    scene.add(new T.AmbientLight(0x6a86a6,.7));
+    var dl=new T.DirectionalLight(0x9bd8ff,.9);dl.position.set(4,6,8);scene.add(dl);
+    var p1=new T.PointLight(0x59c3ff,1.4,40);scene.add(p1);
+    var p2=new T.PointLight(0x4fe3b5,1.1,40);scene.add(p2);
+
+    function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+    var gm=function(c,o){return new T.MeshPhongMaterial({color:c,transparent:true,opacity:o==null?.55:o,shininess:110,specular:0xaadcff,emissive:c,emissiveIntensity:.14})};
+    var edge=function(g,c,o){return new T.LineSegments(new T.EdgesGeometry(g),new T.LineBasicMaterial({color:c,transparent:true,opacity:o==null?.75:o}))};
+    var sph=function(r,c,o){return new T.Mesh(new T.SphereGeometry(r,18,14),gm(c,o))};
+
+    /* doble hélice */
+    var LEN=(N-1)*S+90,R=9,STEP=1.25,cnt=Math.floor(LEN/STEP);
+    var geo=new T.SphereGeometry(.2,10,8);
+    var mA=new T.InstancedMesh(geo,new T.MeshPhongMaterial({color:0x59c3ff,emissive:0x59c3ff,emissiveIntensity:.5}),cnt);
+    var mB=new T.InstancedMesh(geo,new T.MeshPhongMaterial({color:0x4fe3b5,emissive:0x4fe3b5,emissiveIntensity:.5}),cnt);
+    var dm=new T.Object3D(),rp=[];
+    for(var i=0;i<cnt;i++){
+      var z=30-i*STEP,a=z*.32;
+      dm.position.set(Math.cos(a)*R,Math.sin(a)*R,z);dm.updateMatrix();mA.setMatrixAt(i,dm.matrix);
+      dm.position.set(-Math.cos(a)*R,-Math.sin(a)*R,z);dm.updateMatrix();mB.setMatrixAt(i,dm.matrix);
+      if(i%3===0)rp.push(Math.cos(a)*R,Math.sin(a)*R,z,-Math.cos(a)*R,-Math.sin(a)*R,z);
+    }
+    scene.add(mA,mB);
+    var rg=new T.BufferGeometry();rg.setAttribute('position',new T.Float32BufferAttribute(rp,3));
+    scene.add(new T.LineSegments(rg,new T.LineBasicMaterial({color:0x7fb8e0,transparent:true,opacity:.22})));
+
+    /* partículas */
+    var pr=rng(7),pp=[];for(var k=0;k<1000;k++)pp.push((pr()-.5)*70,(pr()-.5)*44,30-pr()*(LEN+20));
+    var pg=new T.BufferGeometry();pg.setAttribute('position',new T.Float32BufferAttribute(pp,3));
+    scene.add(new T.Points(pg,new T.PointsMaterial({color:0x9fdcff,size:.13,transparent:true,opacity:.55,depthWrite:false})));
+
+    /* estaciones */
+    var pal=[0x59c3ff,0x4fe3b5,0xb7a6ff,0x8ad7ff,0x7ef0cf];
+    var builders=[
+      function(){ /* péptido en hélice alfa */
+        var g=new T.Group(),pts=[];
+        for(var i=0;i<16;i++){var a=i*.95;pts.push(new T.Vector3(Math.cos(a)*1.5,(i-8)*.46,Math.sin(a)*1.5))}
+        g.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),120,.07,8,false),gm(0xbfe6ff,.8)));
+        pts.forEach(function(p,i){var b=sph(.3,pal[i%5],.7);b.position.copy(p);g.add(b)});
+        g.rotation.z=.35;g.scale.setScalar(1.2);return g;
+      },
+      function(){var g=new T.Group();var a=new T.IcosahedronGeometry(2.3,1);g.add(edge(a,0x59c3ff,.8));g.add(new T.Mesh(new T.IcosahedronGeometry(1.7,0),gm(0x4fe3b5,.4)));
+        var v=new T.IcosahedronGeometry(2.3,0).attributes.position,seen={};for(var i=0;i<v.count;i++){var key=v.getX(i).toFixed(2)+v.getY(i).toFixed(2)+v.getZ(i).toFixed(2);if(seen[key])continue;seen[key]=1;var n=sph(.17,0xffffff,.9);n.position.set(v.getX(i),v.getY(i),v.getZ(i));g.add(n)}return g},
+      function(){var g=new T.Group();var a=sph(1.25,0x59c3ff,.55),b=sph(1.25,0x4fe3b5,.55);a.position.x=-2;b.position.x=2;g.add(a,b);
+        var c=new T.Mesh(new T.CylinderGeometry(.14,.14,2.6,10),gm(0xffffff,.5));c.rotation.z=Math.PI/2;g.add(c);g.add(edge(new T.SphereGeometry(1.25,12,8),0x59c3ff,.4).translateX(-2));g.add(edge(new T.SphereGeometry(1.25,12,8),0x4fe3b5,.4).translateX(2));return g},
+      function(){var g=new T.Group();[1,1.6,2.2,2.8].forEach(function(r,i){var t=new T.Mesh(new T.TorusGeometry(r,.06,10,64),gm(pal[i],.8));t.rotation.set(i*.5,i*.8,0);t.userData.spin=[.25+i*.12,.18,.1];g.add(t)});return g},
+      function(){var g=new T.Group(),r=rng(3);for(var i=0;i<7;i++){var o=new T.OctahedronGeometry(.5+r()*.7);var m=new T.Mesh(o,gm(i%2?0xff7b8f:0xf5b94a,.5));m.position.set((r()-.5)*4.4,(r()-.5)*4,(r()-.5)*3);m.rotation.set(r()*3,r()*3,0);g.add(m);var e=edge(o,0xffffff,.5);e.position.copy(m.position);e.rotation.copy(m.rotation);g.add(e)}return g},
+      function(){var g=new T.Group(),r=rng(11),ps=[];for(var i=0;i<15;i++){var p=new T.Vector3(r()-.5,r()-.5,r()-.5).normalize().multiplyScalar(1.2+r()*1.7);ps.push(p);var n=sph(.14+r()*.14,pal[i%5],.85);n.position.copy(p);g.add(n)}
+        var lp=[];for(var a=0;a<ps.length;a++)for(var b=a+1;b<ps.length;b++)if(ps[a].distanceTo(ps[b])<2.3)lp.push(ps[a].x,ps[a].y,ps[a].z,ps[b].x,ps[b].y,ps[b].z);
+        var lg=new T.BufferGeometry();lg.setAttribute('position',new T.Float32BufferAttribute(lp,3));g.add(new T.LineSegments(lg,new T.LineBasicMaterial({color:0x8ad7ff,transparent:true,opacity:.5})));return g},
+      function(){var g=new T.Group(),lp=[],d=1.3;for(var x=0;x<3;x++)for(var y=0;y<3;y++)for(var z=0;z<3;z++){var n=sph(.19,pal[(x+y+z)%5],.9);n.position.set((x-1)*d,(y-1)*d,(z-1)*d);g.add(n);
+        if(x<2)lp.push((x-1)*d,(y-1)*d,(z-1)*d,x*d,(y-1)*d,(z-1)*d);if(y<2)lp.push((x-1)*d,(y-1)*d,(z-1)*d,(x-1)*d,y*d,(z-1)*d);if(z<2)lp.push((x-1)*d,(y-1)*d,(z-1)*d,(x-1)*d,(y-1)*d,z*d)}
+        var lg=new T.BufferGeometry();lg.setAttribute('position',new T.Float32BufferAttribute(lp,3));g.add(new T.LineSegments(lg,new T.LineBasicMaterial({color:0x59c3ff,transparent:true,opacity:.45})));return g},
+      function(){var g=new T.Group();g.add(new T.Mesh(new T.IcosahedronGeometry(1.8,1),gm(0x4fe3b5,.5)));g.add(edge(new T.IcosahedronGeometry(2.5,1),0x59c3ff,.7));var t=new T.Mesh(new T.TorusGeometry(3,.05,10,80),gm(0xffffff,.7));t.userData.spin=[.3,.1,0];g.add(t);return g}
+    ];
+    var stations=[];
+    for(var i=0;i<N;i++){var g=builders[i%builders.length]();g.userData.i=i;scene.add(g);stations.push(g)}
+
+    var mouse={x:0,y:0},cm={x:0,y:0},fCur=0,lastY=window.scrollY,vel=0,aspect=1,t0=performance.now();
+    function size(){
+      var w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);aspect=w/h;camera.aspect=aspect;camera.updateProjectionMatrix();
+      var half=Math.tan(30*Math.PI/180)*14*aspect,x=Math.min(6.8,half*.62);
+      stations.forEach(function(g,i){var side=i%2===0?1:-1;g.userData.x=innerWidth<980?0:side*x;g.userData.y=innerWidth<980?3.2:0});
+    }
+    size();window.addEventListener('resize',size);
+    if(fine&&!reduce)window.addEventListener('pointermove',function(e){mouse.x=e.clientX/innerWidth-.5;mouse.y=e.clientY/innerHeight-.5},{passive:true});
+
+    function frame(now){
+      requestAnimationFrame(frame);
+      if(document.hidden)return;
+      var dt=Math.min((now-t0)/1000,.05);t0=now;
+      var sy=window.scrollY,target=frac(sy+innerHeight*.5);
+      vel+=((sy-lastY)-vel)*.15;lastY=sy;
+      fCur+=(target-fCur)*(reduce?1:.09);
+      cm.x+=(mouse.x-cm.x)*.05;cm.y+=(mouse.y-cm.y)*.05;
+      var z=4-fCur*S,sw=reduce?0:1;
+      camera.position.set(Math.sin(fCur*1.1)*1.3*sw+cm.x*2.2,Math.cos(fCur*.8)*.9*sw-cm.y*1.6,z);
+      camera.lookAt(camera.position.x*.4,camera.position.y*.4,z-20);
+      camera.rotation.z+= (reduce?0:Math.max(-.12,Math.min(.12,-vel*.0016)));
+      p1.position.set(camera.position.x+4,camera.position.y+3,z-8);p2.position.set(camera.position.x-5,camera.position.y-3,z-16);
+      var tt=now/1000;
+      stations.forEach(function(g){
+        var i=g.userData.i;g.position.set(g.userData.x,g.userData.y,-i*S-10);
+        if(!reduce){g.rotation.y+=dt*.22;if(i===0)g.position.y+=Math.sin(tt)*.2;
+          g.children.forEach(function(c){var s=c.userData.spin;if(s){c.rotation.x+=dt*s[0];c.rotation.y+=dt*s[1];c.rotation.z+=dt*s[2]}})}
+      });
+      renderer.render(scene,camera);
+      /* UI sincronizada con la cámara */
+      var idx=Math.round(fCur);
+      if(idx!==frame.idx){frame.idx=idx;[].forEach.call($('#rail').children,function(b,j){b.classList.toggle('on',j===idx)})}
+      if(!reduce){
+        for(var k=0;k<tilts.length;k++){
+          var r=tilts[k].getBoundingClientRect(),d=((r.top+r.height/2)-innerHeight/2)/innerHeight;
+          d=Math.max(-1,Math.min(1,d));tilts[k].style.setProperty('--sx',(d*5).toFixed(2)+'deg');
+        }
+      }
+    }
+    requestAnimationFrame(frame);
+    return true;
+  }catch(err){canvas.style.display='none';return false}
+})();
+
+/* inclinación y brillo de los paneles al pasar el puntero */
+var tilts=[].slice.call(document.querySelectorAll('[data-tilt]'));
+if(fine&&!reduce){
+  tilts.forEach(function(el){
+    el.addEventListener('pointermove',function(e){
+      var r=el.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      el.style.setProperty('--ry',((px-.5)*3).toFixed(2)+'deg');
+      el.style.setProperty('--rx',(-(py-.5)*3).toFixed(2)+'deg');
+      el.style.setProperty('--mx',(px*100).toFixed(1)+'%');el.style.setProperty('--my',(py*100).toFixed(1)+'%');
+    });
+    el.addEventListener('pointerleave',function(){el.style.setProperty('--ry','0deg');el.style.setProperty('--rx','0deg')});
+  });
+}
+if(!scene3d){/* sin WebGL: la página sigue completa con el fondo CSS */}
+</script>
