@@ -1,0 +1,128 @@
+<title>Ejemplo de catálogo informativo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: una columna ancha de vidrio sobre fondo grafito; arriba lo observado, en medio el catálogo filtrable, abajo las mitigaciones. */
+:root{--bg:#06080b;--fg:#e9eff6;--fg2:#aab8c6;--fg3:#8493a2;--line:rgba(190,215,240,.15);--blue:#59c3ff;--mint:#4fe3b5;--lav:#b7a6ff;--amber:#f5b94a;--rose:#ff7b8f;
+--f-d:'Sora','Segoe UI',system-ui,sans-serif;--f-b:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:radial-gradient(1000px 600px at 90% -10%,rgba(89,195,255,.14),transparent 60%),radial-gradient(800px 600px at -10% 60%,rgba(79,227,181,.09),transparent 60%),var(--bg);background-color:var(--bg);color:var(--fg);font:400 16px/1.6 var(--f-b);padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:32px 60px}
+.wrap{max-width:1040px;margin-inline:auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--f-d);font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1}h2{font-size:1.4rem}h3{font-size:1rem}
+p{margin:0}.m{color:var(--fg2)}.s{font-size:.875rem}
+.glass{border-radius:24px;padding:clamp(18px,3vw,32px);background:linear-gradient(140deg,rgba(255,255,255,.1),rgba(255,255,255,.025) 45%,rgba(89,195,255,.04)),rgba(16,24,33,.5);-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 40px 80px -30px rgba(0,0,0,.75);display:flex;flex-direction:column;gap:16px}
+.soft{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.grid>*{min-width:0}
+ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;font:500 .75rem/1 var(--f-b);padding:5px 10px;border-radius:999px;border:1px solid;white-space:nowrap}
+.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.hecho{color:var(--blue);background:rgba(89,195,255,.1);border-color:rgba(89,195,255,.35)}
+.hip{color:var(--lav);background:rgba(183,166,255,.1);border-color:rgba(183,166,255,.35)}
+.rec{color:var(--mint);background:rgba(79,227,181,.1);border-color:rgba(79,227,181,.35)}
+.bad{color:var(--rose);background:rgba(255,123,143,.1);border-color:rgba(255,123,143,.35)}
+.warn{color:var(--amber);background:rgba(245,185,74,.1);border-color:rgba(245,185,74,.35)}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.btn{all:unset;cursor:pointer;box-sizing:border-box;font:500 .85rem var(--f-b);padding:8px 14px;border-radius:999px;border:1px solid rgba(190,215,240,.28);color:var(--fg2);background:rgba(255,255,255,.04)}
+.btn:hover{color:var(--fg);border-color:var(--blue)}
+.btn[aria-pressed="true"]{color:#04121b;background:var(--blue);border-color:var(--blue);font-weight:600}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.tw{overflow-x:auto;border-radius:16px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:760px;font-size:.88rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--fg2);font-size:.78rem;background:rgba(255,255,255,.04)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:500}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<div class="glass">
+  <h1>Ejemplo de catálogo informativo</h1>
+  <p class="m">Partí del catálogo de complementosdeportivos.mx para ver qué compuestos maneja el sector y cómo quedarían en tu plataforma con las mitigaciones aplicadas. Lo convertí en fichas informativas: sin precios, marcas, enlaces de compra ni dosis.</p>
+  <div class="s m">Tipos de dato: <span class="tag hecho">Hecho</span> observado en el sitio · <span class="tag hip">Hipótesis</span> por verificar en la Fase 2 · <span class="tag rec">Recomendación</span></div>
+</div>
+
+<div class="glass">
+  <h2>Qué observé en ese sitio</h2>
+  <div class="grid">
+    <div class="soft"><span class="tag hecho">Hecho</span><ul style="margin-top:10px"><li>Es una tienda con carrito, precios en MXN y pago por transferencia, OXXO o tarjeta.</li><li>Vende esteroides anabólicos, un SARM (Testolone), clembuterol, hormona de crecimiento, péptidos y fármacos para el control de estrógenos.</li><li>Sus términos dicen que la información es solo informativa y que el uso y la dosificación son responsabilidad del usuario.</li></ul></div>
+    <div class="soft"><span class="tag hecho">Hecho</span><ul style="margin-top:10px"><li>En los textos que leí no encontré número de registro sanitario ni referencia a COFEPRIS.</li><li>Sus textos prometen efectos («potencia», «definición», «resultados») sin citar estudios.</li><li>La página de Somatropina describe un análogo de GHRH en presentación oral. Eso no corresponde a la somatropina, que es la hormona de crecimiento.</li></ul></div>
+    <div class="soft"><span class="tag hip">Hipótesis</span><ul style="margin-top:10px"><li>Buena parte de ese catálogo podría no ser vendible legalmente en México. Falta el dictamen.</li><li>Es el ejemplo de lo que tu plataforma no debería ser: mezcla educación y oferta, y no demuestra su legalidad.</li><li>Su error con la somatropina es una oportunidad: la rigurosidad científica sí te diferencia.</li></ul></div>
+  </div>
+</div>
+
+<div class="glass">
+  <h2>Catálogo informativo propuesto</h2>
+  <p class="m">Los compuestos son los que aparecen en ese catálogo, agrupados por clase. Todas las columnas regulatorias son hipótesis hasta la Fase 2. La vista comercial queda cerrada para todos.</p>
+  <div class="filters" id="f" role="group" aria-label="Filtrar por clase"></div>
+  <div class="tw"><table><thead><tr><th>Compuesto</th><th>Clase</th><th>Ficha informativa</th><th>Estatus en México</th><th>Vista comercial</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <p class="s m">Cada ficha incluiría: nombres y denominaciones, descripción, clasificación, mecanismo, investigación disponible con nivel de evidencia, riesgos y efectos adversos, situación regulatoria y bibliografía. Sin dosis ni protocolos.</p>
+</div>
+
+<div class="glass">
+  <h2>Mitigaciones aplicadas en este ejemplo</h2>
+  <div class="grid" id="mit"></div>
+</div>
+
+<div class="glass">
+  <h2>Mi recomendación sobre esta lista</h2>
+  <p>Usa este catálogo como mapa de temas para el contenido, no como inventario para vender. Las fichas de la clase «Anabólicos androgénicos» y «SARMs» pueden ser educativas con advertencias de riesgo y antidopaje. Para cualquier venta, el primer paso es el dictamen legal compuesto por compuesto. Si quieres, el siguiente entregable es la plantilla de ficha completa con un compuesto de ejemplo y sus fuentes primarias, cuando termine la investigación.</p>
+</div>
+</div>
+
+<script>
+var D=[
+['Testosterona (varias formas)','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Nandrolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Boldenona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Trembolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Estanozolol','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Oxandrolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Metandrostenolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Oximetolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Metenolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Drostanolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Mesterolona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Fluoximesterona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Clorodehidrometiltestosterona','Anabólicos androgénicos','Sí','Por verificar','Cerrada'],
+['Metasterona','Anabólicos androgénicos','Solo mención','Por verificar','Cerrada'],
+['Testolone (RAD140)','SARMs','Sí','Por verificar','Cerrada'],
+['Somatropina','Hormonas y péptidos','Sí','Por verificar','Cerrada'],
+['Péptidos secretagogos (GHRP, sermorelina, CJC-1295)','Hormonas y péptidos','Sí','Por verificar','Cerrada'],
+['Semaglutida','Hormonas y péptidos','Sí','Por verificar','Cerrada'],
+['Tirzepatida','Hormonas y péptidos','Sí','Por verificar','Cerrada'],
+['Retatrutida','Hormonas y péptidos','Sí','Por verificar','Cerrada'],
+['Gonadotropina coriónica','Hormonas y péptidos','Sí','Por verificar','Cerrada'],
+['Anastrozol','Control de estrógenos','Sí','Por verificar','Cerrada'],
+['Exemestano','Control de estrógenos','Sí','Por verificar','Cerrada'],
+['Clomifeno','Control de estrógenos','Sí','Por verificar','Cerrada'],
+['Tamoxifeno','Control de estrógenos','Sí','Por verificar','Cerrada'],
+['Clembuterol','Otros','Solo mención','Por verificar','Cerrada'],
+['Cócteles de mesoterapia','Otros','No (fuera del alcance)','Por verificar','Cerrada']
+];
+var CL=['Todos'].concat(D.map(function(r){return r[1]}).filter(function(v,i,a){return a.indexOf(v)===i}));
+var cur='Todos';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function draw(){
+  document.getElementById('f').innerHTML=CL.map(function(c){return '<button class="btn" type="button" aria-pressed="'+(c===cur)+'" data-c="'+esc(c)+'">'+esc(c)+'</button>'}).join('');
+  document.getElementById('rows').innerHTML=D.filter(function(r){return cur==='Todos'||r[1]===cur}).map(function(r){
+    var fc=r[2]==='Sí'?'rec':'warn';
+    return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td><span class="tag '+fc+'">'+esc(r[2])+'</span></td><td><span class="tag hip">'+esc(r[3])+'</span></td><td><span class="tag bad">'+esc(r[4])+'</span></td></tr>';
+  }).join('');
+}
+document.getElementById('f').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;cur=b.getAttribute('data-c');draw()});
+draw();
+var M=[
+['Lista blanca comercial','Ningún producto aparece con precio o compra hasta que haya dictamen y evidencia de registro sanitario para ese producto.'],
+['Sin dosis ni protocolos','Las fichas no incluyen dosificación, ciclos ni combinaciones, aunque el catálogo observado sí los sugiere.'],
+['Nivel de evidencia visible','Cada afirmación se etiqueta como ensayo en humanos, estudio en animales, estudio celular o hipótesis, con su cita.'],
+['Revisor identificado','Cada ficha muestra autor, revisor con credenciales, fecha de revisión y bibliografía.'],
+['Educación separada de oferta','Las fichas no enlazan a páginas de compra. Los contactos comerciales pasan por un formulario con política de uso.'],
+['Advertencias en cada ficha','Riesgos y efectos adversos, situación antidopaje y aviso de que no sustituye a un profesional de salud.'],
+['Mayoría de edad y datos','Aviso 18+, aviso de privacidad y solo los datos indispensables en formularios.'],
+['Directorio verificado','Solo profesionales con cédula verificable y establecimientos con licencia, con criterios públicos.']
+];
+document.getElementById('mit').innerHTML=M.map(function(m){return '<div class="soft"><h3>'+esc(m[0])+'</h3><p class="s m" style="margin-top:6px">'+esc(m[1])+'</p></div>'}).join('');
+</script>
