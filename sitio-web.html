@@ -1,0 +1,713 @@
+<title>Sitio Web Péptidos y Anabólicos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Plataforma científica informativa sobre péptidos, SARMs y anabólicos. Sin venta, sin dosis, con fuentes.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Concepto "La forja" (mismo lenguaje visual de Inferno): negro carbón, oro envejecido y brasa. Aquí la brasa marca avisos y límites, nunca una compra. Recorrido 3D de entrada y luego secciones de vidrio cálido. */
+:root{
+  --ink:#0b0908;--coal:#14100d;--coal-2:#1d1712;
+  --line:rgba(200,134,42,.2);
+  --gold:#c8862a;--gold-hi:#f0b552;--gold-lo:#7a4a14;
+  --ember:#ff5a1f;--bone:#efe6d6;--ash:#a89a88;--ok:#5fbf77;
+  --f-gothic:"Pirata One","UnifrakturCook",Georgia,serif;
+  --f-display:"Big Shoulders Display","Oswald","Arial Narrow",Impact,sans-serif;
+  --f-body:"Barlow","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --f-label:"Barlow Condensed","Arial Narrow",sans-serif;
+  --gut:max(16px,env(safe-area-inset-left,0px));--gut-r:max(16px,env(safe-area-inset-right,0px));
+  --ease:cubic-bezier(.2,.7,.2,1);--r:14px;
+  --glass-bg:rgba(255,236,210,.055);--glass-bg2:rgba(255,236,210,.09);--glass-line:rgba(255,226,180,.14);
+  --glass:blur(18px) saturate(1.4);
+  --gshadow:0 18px 50px -22px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,240,215,.14);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background-color:var(--ink);color:var(--bone);font:400 16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  background-image:radial-gradient(34% 30% at 10% 20%,rgba(255,90,31,.12),transparent 70%),radial-gradient(30% 28% at 90% 45%,rgba(240,181,82,.1),transparent 70%),radial-gradient(40% 34% at 70% 92%,rgba(200,134,42,.1),transparent 70%)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:90;background:var(--ink)}
+h1,h2,h3,h4{margin:0;font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1;text-wrap:balance}
+p{margin:0}a{color:inherit}
+.gothic{font-family:var(--f-gothic);font-weight:400;text-transform:none;color:var(--gold-hi);letter-spacing:0}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:6px}
+.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:var(--gut) var(--gut-r)}
+.eyebrow{font:600 .8rem/1 var(--f-label);letter-spacing:.22em;text-transform:uppercase;color:var(--gold-hi)}
+.lead{color:#d9cdb9;font-size:1.1rem;max-width:62ch}
+.ash{color:var(--ash)}
+/* botones */
+.btn{--b:var(--gold);display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 24px;border-radius:999px;border:1.5px solid var(--b);background:transparent;color:var(--bone);font:700 .95rem/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:background-color .25s,color .25s,transform .25s var(--ease),box-shadow .25s}
+.btn:hover{transform:translateY(-2px);background:rgba(200,134,42,.14)}
+.btn-fire{--b:var(--ember);background:linear-gradient(180deg,#ff7a3a,var(--ember));color:#1a0802;border-color:transparent;box-shadow:0 10px 30px -10px rgba(255,90,31,.7)}
+.btn-fire:hover{background:linear-gradient(180deg,#ff8a4e,#ff6a30)}
+.btn-ghost{background:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass)}
+.btn-sm{min-height:38px;padding:0 14px;font-size:.8rem}
+/* promo */
+.promo{overflow:hidden;background:linear-gradient(90deg,#3a1606,#5a2208 50%,#3a1606);color:#ffd9b8;font:600 .82rem/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;padding:11px 0;white-space:nowrap}
+.promo-track{display:inline-flex;gap:0;animation:marquee 40s linear infinite}
+.promo-track span{padding-right:44px}
+.promo-track span::before{content:"✦";color:var(--gold-hi);margin-right:14px}
+@keyframes marquee{to{transform:translateX(-50%)}}
+/* header */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:80;background:rgba(11,9,8,.7);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid var(--line)}
+.hdr .wrap{display:flex;align-items:center;gap:18px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:none}
+.brand svg{width:34px;height:34px}
+.brand b{display:block;font:400 1.7rem/1 var(--f-gothic);color:var(--gold-hi)}
+.brand small{display:block;font:600 .62rem/1 var(--f-label);letter-spacing:.3em;text-transform:uppercase;color:var(--ash);margin-top:2px}
+.nav{display:flex;gap:2px;margin-left:auto}
+.nav a{padding:10px 12px;border-radius:999px;font:600 .9rem/1 var(--f-label);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ash);transition:all .2s}
+.nav a:hover{color:var(--bone);background:rgba(200,134,42,.12)}
+.nav a.cta{color:var(--gold)}
+.menu-btn{display:none;margin-left:auto;width:44px;height:44px;border-radius:12px;border:1px solid var(--glass-line);background:var(--glass-bg);color:var(--bone);cursor:pointer;place-items:center}
+.menu-btn svg{width:22px;height:22px}
+.mnav{position:fixed;inset:0;z-index:95;background:rgba(7,5,4,.96);display:grid;align-content:center;justify-items:center;gap:6px;padding:24px}
+.mnav[hidden]{display:none}
+.mnav a{font:800 2.2rem/1.2 var(--f-display);text-transform:uppercase;text-decoration:none}
+.mnav .x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px))}
+/* tour */
+.tour{position:relative;height:520vh}
+.tour-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#070504}
+.tour-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s}
+.tour.gl-on canvas{opacity:1}
+.tour-fallback{position:absolute;inset:0;background:radial-gradient(60% 50% at 62% 55%,rgba(255,90,31,.24),transparent 70%),radial-gradient(40% 40% at 25% 30%,rgba(200,134,42,.16),transparent 70%),#070504;transition:opacity 1s}
+.tour.gl-on .tour-fallback{opacity:0}
+.tour-shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 80% at 50% 40%,transparent 50%,rgba(7,5,4,.85) 100%),linear-gradient(0deg,rgba(7,5,4,.9) 0%,transparent 32%)}
+.tour-top{position:absolute;top:16px;left:0;right:0;z-index:3}
+.tour-top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tour-note{font:500 .75rem/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.skip{border:1px solid var(--glass-line);background:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);color:var(--bone);border-radius:999px;padding:9px 14px;cursor:pointer;font:600 .78rem/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
+.chap{position:absolute;inset:0;z-index:2;display:grid;align-content:center;opacity:0;pointer-events:none;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.chap.on{opacity:1;transform:none;pointer-events:auto}
+.chap .wrap{display:grid;gap:14px;justify-items:start}
+.chap.center .wrap{justify-items:center;text-align:center}
+.chap h1,.chap h2{font-size:clamp(2.6rem,7.4vw,6.4rem);max-width:14ch;text-shadow:0 4px 40px rgba(0,0,0,.8)}
+.chap h1 .gothic,.chap h2 .gothic{font-size:1.08em}
+.chap p{color:#d9cdb9;font-size:clamp(1rem,1.6vw,1.2rem);max-width:46ch;text-shadow:0 2px 20px rgba(0,0,0,.9)}
+.chap .row{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.chap .tags{display:flex;flex-wrap:wrap;gap:8px}
+.chap .tags span{padding:7px 12px;border:1px solid var(--glass-line);border-radius:999px;background:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);font:600 .8rem/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
+.rail{position:absolute;right:max(18px,env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%);z-index:4;list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rail button{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:12px;color:var(--bone);padding:4px 0;font:600 .8rem/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase}
+.rail span{opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s var(--ease)}
+.rail button::after{content:"";width:11px;height:11px;border:1.5px solid rgba(239,230,214,.6);transition:all .3s var(--ease)}
+.rail button:hover span,.rail button.on span{opacity:1;transform:none}
+.rail button.on::after{background:var(--gold-hi);border-color:var(--gold-hi);transform:rotate(45deg) scale(1.3)}
+.rail button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:4px}
+.hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:10px;font:600 .8rem/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--ash);transition:opacity .4s}
+.hint i{width:20px;height:32px;border:1.5px solid currentColor;border-radius:12px;position:relative}
+.hint i::after{content:"";position:absolute;left:50%;top:6px;width:3px;height:6px;margin-left:-1.5px;border-radius:2px;background:var(--gold-hi);animation:wheel 1.8s var(--ease) infinite}
+@keyframes wheel{60%{transform:translateY(9px);opacity:0}}
+.tour.moved .hint{opacity:0}
+.tbar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(239,230,214,.1);z-index:4}
+.tbar i{position:absolute;inset:0;background:linear-gradient(90deg,var(--gold),var(--ember));transform-origin:0 50%;transform:scaleX(0)}
+@media (max-width:960px){.tour{height:460vh}.rail{display:none}.nav{display:none}.menu-btn{display:grid}}
+/* secciones */
+.sec{position:relative;padding-block:clamp(64px,10vw,120px)}
+.sec + .sec::before{content:"";position:absolute;top:0;left:var(--gut);right:var(--gut-r);height:1px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--ember) 50%,var(--gold) 70%,transparent);opacity:.55}
+.sec-head{display:grid;gap:14px;margin-bottom:36px;max-width:780px}
+.sec-head h2{font-size:clamp(2.2rem,5.4vw,4.2rem)}
+.glassb{background-color:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--gshadow)}
+.glow{--mx:50%;--my:0%;background-image:radial-gradient(260px circle at var(--mx) var(--my),rgba(240,181,82,.16),transparent 60%)}
+/* marca */
+.brandblk{display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:center}
+.brandblk>*{min-width:0}
+.brandblk h2{font-size:clamp(2.1rem,4.6vw,3.6rem);margin:12px 0 16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stats li{display:grid;gap:6px;padding:18px;border-radius:var(--r)}
+.stats b{font:800 clamp(2rem,4vw,2.8rem)/1 var(--f-display);background:linear-gradient(180deg,var(--gold-hi),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stats span{font:600 .8rem/1.2 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+/* familias */
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ctile{position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:12px;min-height:340px;padding:22px;border-radius:20px;text-decoration:none;cursor:pointer;transition:transform .3s var(--ease),border-color .25s;transform-style:preserve-3d;text-align:left;font:inherit;color:inherit;border:1px solid var(--glass-line);background-color:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);box-shadow:var(--gshadow)}
+.ctile:hover{border-color:rgba(240,181,82,.5)}
+.ctile-n{font:900 4.2rem/.9 var(--f-display);color:transparent;-webkit-text-stroke:1.5px rgba(240,181,82,.6)}
+.ctile svg{width:100%;max-height:120px;justify-self:center}
+.ctile b{display:block;font:800 1.7rem/1 var(--f-display);text-transform:uppercase}
+.ctile small{display:block;margin-top:8px;color:var(--ash);font-size:.92rem}
+.ctile-go{font:700 .8rem/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);display:flex;gap:8px;align-items:center}
+.ctile-go i{font-style:normal;transition:transform .25s var(--ease)}
+.ctile:hover .ctile-go i{transform:translateX(5px)}
+/* evidencia */
+.gamas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.gtile{display:grid;gap:12px;align-content:start;padding:22px;border-radius:20px;min-height:280px}
+.gtile h3{font-size:1.5rem}
+.gtile p{color:#d9cdb9;font-size:.95rem}
+.meter{display:flex;gap:5px}
+.meter i{flex:1;height:8px;border-radius:4px;background:rgba(239,230,214,.1)}
+.meter i.on{background:linear-gradient(90deg,var(--gold),var(--gold-hi));box-shadow:0 0 12px rgba(240,181,82,.45)}
+.gtile small{font:600 .75rem/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+/* catálogo */
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:22px}
+.search{position:relative;flex:1 1 280px;max-width:460px}
+.search svg{position:absolute;left:14px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--ash)}
+.input{width:100%;min-height:46px;padding:0 16px;border-radius:10px;border:1px solid var(--glass-line);background:rgba(255,236,210,.05);color:var(--bone);font:500 1rem var(--f-body)}
+.search .input{padding-left:42px;border-radius:999px}
+.input::placeholder{color:var(--ash)}
+textarea.input{min-height:110px;padding:12px 16px;resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{all:unset;cursor:pointer;box-sizing:border-box;padding:9px 14px;border-radius:999px;border:1px solid var(--glass-line);background:var(--glass-bg);font:700 .85rem/1 var(--f-label);letter-spacing:.08em;text-transform:uppercase;color:var(--ash);transition:all .2s}
+.chip:hover{color:var(--bone);border-color:var(--gold)}
+.chip[aria-pressed="true"]{color:#1a0e02;background:var(--gold-hi);border-color:var(--gold-hi)}
+.chip:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.count{color:var(--ash);font:600 .85rem/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;margin-left:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.pcard{display:grid;gap:10px;align-content:start;padding:18px;border-radius:var(--r);min-width:0;text-align:left;font:inherit;color:inherit;cursor:pointer;border:1px solid var(--glass-line);background-color:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);box-shadow:var(--gshadow);transition:transform .3s var(--ease),border-color .25s}
+.pcard:hover{transform:translateY(-4px);border-color:rgba(240,181,82,.5)}
+.pcard .cl{font:700 .74rem/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+.pcard h3{font-size:1.5rem;line-height:1.02}
+.pcard p{color:#d9cdb9;font-size:.92rem}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font:700 .72rem/1 var(--f-label);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--glass-line);color:var(--ash)}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.warn{color:var(--gold-hi);border-color:rgba(240,181,82,.4)}
+.pill.fire{color:#ff9a6a;border-color:rgba(255,90,31,.5)}
+.pcard .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.pcard .go{font:700 .8rem/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--gold-hi);margin-top:4px}
+.empty{padding:40px;border:1px dashed var(--line);border-radius:var(--r);text-align:center;color:var(--ash)}
+.note{font-size:.88rem;color:var(--ash);max-width:80ch;margin-top:20px}
+/* diálogo */
+dialog.qv{width:min(920px,calc(100% - 24px));max-height:calc(100% - 24px);padding:0;border:1px solid rgba(240,181,82,.35);border-radius:22px;color:var(--bone);background:radial-gradient(60% 40% at 80% 0%,rgba(200,134,42,.22),transparent 70%),#0f0b09;overflow:auto}
+dialog.qv::backdrop{background:rgba(5,3,2,.75);backdrop-filter:blur(6px)}
+.qv-in{padding:clamp(20px,4vw,36px);display:grid;gap:16px;position:relative}
+.qv-in h3{font-size:clamp(2rem,4vw,3rem)}
+.qv-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:1px solid var(--glass-line);background:var(--glass-bg);color:var(--bone);cursor:pointer;font-size:1.2rem}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--line)}
+.tabs button{padding:10px 12px;background:none;border:0;border-bottom:2px solid transparent;cursor:pointer;font:700 .82rem/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase;color:var(--ash)}
+.tabs button[aria-selected="true"]{color:var(--bone);border-color:var(--gold-hi)}
+.tabs button:focus-visible{outline:2px solid var(--gold-hi)}
+.tabbody{min-height:110px;color:#d9cdb9;max-width:70ch}
+.draft{display:inline-block;margin-right:8px;padding:3px 8px;border-radius:999px;background:rgba(255,90,31,.15);color:#ff9a6a;font:700 .7rem/1 var(--f-label);letter-spacing:.12em;text-transform:uppercase}
+/* comparador */
+.tbl{overflow-x:auto;border-radius:var(--r)}
+table{width:100%;border-collapse:collapse;min-width:680px}
+th,td{padding:16px 18px;text-align:left;border-bottom:1px solid var(--glass-line);vertical-align:top;font-size:.95rem}
+th{font:700 .78rem/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+tbody th{color:var(--ash);width:170px}
+tr:last-child td,tr:last-child th{border-bottom:0}
+td b{font:800 1.15rem/1 var(--f-display);text-transform:uppercase}
+/* ciencia */
+.sci-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.sci-tabs button{display:flex;align-items:baseline;gap:10px;padding:16px 18px;border-radius:16px;border:1px solid var(--glass-line);background:var(--glass-bg);cursor:pointer;color:var(--ash);font:700 .95rem/1.1 var(--f-label);letter-spacing:.1em;text-transform:uppercase;text-align:left;transition:all .2s}
+.sci-tabs .num{font:900 1.6rem/1 var(--f-display);color:transparent;-webkit-text-stroke:1px rgba(240,181,82,.55)}
+.sci-tabs button:hover{color:var(--bone)}
+.sci-tabs button[aria-selected="true"]{color:var(--bone);border-color:var(--gold-hi);background:rgba(240,181,82,.1)}
+.sci-tabs button[aria-selected="true"] .num{color:var(--gold-hi);-webkit-text-stroke:0}
+.sci-hero{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;padding:28px;border-radius:20px;margin-bottom:16px;background:radial-gradient(50% 50% at 15% 50%,rgba(255,90,31,.14),transparent 70%),var(--glass-bg);border:1px solid var(--glass-line);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass)}
+.sci-word{font:900 clamp(3rem,8vw,6rem)/.9 var(--f-display);color:transparent;-webkit-text-stroke:1.5px var(--gold-hi);text-transform:uppercase}
+.sci-hero h3{font-size:clamp(1.5rem,3vw,2.2rem);margin-bottom:8px}
+.sci-hero p{color:#d9cdb9;max-width:70ch}
+.sci-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.sci-grid article{padding:20px;border-radius:16px;border:1px solid var(--glass-line);border-top:2px solid var(--gold);background:var(--glass-bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);display:grid;gap:8px;align-content:start}
+.sci-grid h4{font-size:1.2rem}
+.sci-grid p{color:#d9cdb9;font-size:.95rem}
+/* directorio */
+.dir{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dir>*{min-width:0}
+.vault{padding:28px;border-radius:20px;display:grid;gap:16px;align-content:start}
+.vault h3{font-size:clamp(1.8rem,3.4vw,2.6rem)}
+.vault ol{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:v}
+.vault li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;counter-increment:v;color:#d9cdb9}
+.vault li::before{content:counter(v);width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font:700 .9rem/1 var(--f-label);color:var(--gold-hi)}
+.form{padding:24px;border-radius:20px;display:grid;gap:14px;align-content:start}
+.field{display:grid;gap:6px}
+.field label{font:600 .78rem/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:.9rem;color:#d9cdb9}
+.check input{width:20px;height:20px;accent-color:var(--gold);flex:none;margin-top:2px}
+.msg{font-size:.92rem;padding:12px 14px;border-radius:12px;border:1px solid rgba(95,191,119,.4);background:rgba(95,191,119,.08);color:#bfe8c9}
+.msg.err{border-color:rgba(255,90,31,.5);background:rgba(255,90,31,.08);color:#ffb08a}
+.dirstate{padding:22px;border-radius:var(--r);border:1px dashed var(--line);color:var(--ash)}
+/* faq + legal */
+.faq{display:grid;gap:10px;max-width:860px}
+.faq details{border-radius:12px;border:1px solid var(--glass-line);background:var(--glass-bg)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 20px;font:700 1.05rem/1.2 var(--f-label);letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--gold-hi);font-size:1.4rem;line-height:1;transition:transform .3s var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 20px 18px;color:var(--ash);max-width:70ch}
+/* cta + footer */
+.cta-band{display:grid;grid-template-columns:1.3fr 1fr;gap:30px;align-items:center;padding:clamp(24px,4vw,48px);border-radius:24px;border:1px solid rgba(240,181,82,.3);background:radial-gradient(60% 80% at 100%,rgba(255,90,31,.25),transparent 60%),linear-gradient(135deg,#1a110b,#0f0b09)}
+.cta-band>*{min-width:0}
+.cta-band h2{font-size:clamp(2.2rem,5vw,4rem)}
+.cl-list{display:grid;gap:10px}
+.cl-list div{display:grid;gap:2px;padding:14px 16px;border-radius:12px;border:1px solid var(--glass-line);background:var(--glass-bg)}
+.cl-list small{font:600 .74rem/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi)}
+.cl-list b{font:700 1.1rem/1.2 var(--f-label)}
+footer{padding-block:60px 40px;border-top:1px solid var(--line);margin-top:60px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}
+.foot>*{min-width:0}
+.foot h4{margin:0 0 12px;font:700 .8rem/1 var(--f-label);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;color:var(--ash)}
+.foot a{text-decoration:none}.foot a:hover{color:var(--bone)}
+.legal{font-size:.85rem;color:var(--ash);margin-top:30px;padding-top:20px;border-top:1px solid var(--line);max-width:90ch}
+@media (max-width:1100px){.gamas{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:960px){
+  .brandblk,.dir,.cta-band{grid-template-columns:1fr}
+  .sci-tabs{grid-template-columns:1fr 1fr}.sci-grid{grid-template-columns:1fr}
+  .foot{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .gamas{grid-template-columns:1fr}.two{grid-template-columns:1fr}.sci-hero{grid-template-columns:1fr}
+  .foot{grid-template-columns:1fr}.brand small{display:none}.grid{grid-template-columns:1fr}.count{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.promo-track{animation:none}}
+</style>
+
+<div class="promo" aria-label="Avisos del sitio"><div class="promo-track" id="promo"></div></div>
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="Inicio">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M9 4c0 9 22 9 22 16S9 29 9 36M31 4c0 9-22 9-22 16s22 7 22 16" stroke="#f0b552" stroke-width="2" stroke-linecap="round"/><path d="M12 11h16M12 29h16" stroke="#ff5a1f" stroke-width="2" stroke-linecap="round"/></svg>
+      <span><b>Tu Marca</b><small>Plataforma científica</small></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#familias">Familias</a><a href="#evidencia">Evidencia</a><a href="#catalogo">Fichas</a><a href="#comparador">Comparador</a><a href="#metodo">Método</a><a href="#directorio">Profesionales</a><a href="#contacto" class="cta">Contacto</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+  </div>
+</header>
+<div class="mnav" id="mnav" hidden>
+  <button class="menu-btn x" id="menuClose" aria-label="Cerrar menú" style="display:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <a href="#familias">Familias</a><a href="#evidencia">Evidencia</a><a href="#catalogo">Fichas</a><a href="#comparador">Comparador</a><a href="#metodo">Método</a><a href="#directorio">Profesionales</a><a href="#contacto">Contacto</a>
+</div>
+
+<!-- ===== INTRO 3D ===== -->
+<section class="tour" id="inicio" aria-label="Recorrido de bienvenida">
+  <div class="tour-stage">
+    <div class="tour-fallback"></div>
+    <canvas id="tourCanvas" aria-hidden="true"></canvas>
+    <div class="tour-shade" aria-hidden="true"></div>
+    <div class="tour-top"><div class="wrap"><span class="tour-note">Recorrido 3D · Desliza</span><button class="skip" id="skipIntro" type="button">Saltar intro ↓</button></div></div>
+
+    <div class="chap center on" data-c="0"><div class="wrap">
+      <span class="eyebrow">Péptidos · SARMs · Anabólicos</span>
+      <h1>Ciencia <span class="gothic">sin humo</span></h1>
+      <p>Información rigurosa sobre compuestos de farmacología deportiva. Aquí se explica, no se vende.</p>
+    </div></div>
+    <div class="chap" data-c="1"><div class="wrap">
+      <span class="eyebrow">Capítulo II · La evidencia</span>
+      <h2>Cada dato, con su <span class="gothic">fuente</span></h2>
+      <p>Distinguimos entre ensayos en humanos, estudios en animales, estudios celulares e hipótesis. Nada se presenta como hecho sin respaldo.</p>
+    </div></div>
+    <div class="chap" data-c="2"><div class="wrap">
+      <span class="eyebrow">Capítulo III · El límite</span>
+      <h2>Lo que <span class="gothic">no</span> publicamos</h2>
+      <p>Sin dosis, sin ciclos, sin protocolos y sin enlaces de compra. La información es educativa y no sustituye a un profesional de la salud.</p>
+      <div class="tags"><span>Sin dosis</span><span>Sin ciclos</span><span>Sin ventas</span></div>
+    </div></div>
+    <div class="chap" data-c="3"><div class="wrap">
+      <span class="eyebrow">Capítulo IV · La biblioteca</span>
+      <h2>Fichas, <span class="gothic">glosario</span> y profesionales</h2>
+      <p>Nueve secciones por compuesto, revisión experta y un directorio donde solo entran profesionales verificables.</p>
+      <div class="tags"><span>Péptidos</span><span>SARMs</span><span>Anabólicos</span></div>
+    </div></div>
+    <div class="chap center" data-c="4"><div class="wrap">
+      <span class="eyebrow">Tu Marca</span>
+      <h2>Entra a la <span class="gothic">biblioteca</span></h2>
+      <p>Explora las fichas informativas. Solo para mayores de 18 años.</p>
+      <div class="row"><a class="btn btn-fire" href="#catalogo">Ver fichas</a><a class="btn btn-ghost" href="#metodo">Cómo trabajamos</a></div>
+    </div></div>
+
+    <ol class="rail" id="rail" aria-label="Capítulos del recorrido">
+      <li><button type="button" data-go="0"><span>Inicio</span></button></li>
+      <li><button type="button" data-go="1"><span>La evidencia</span></button></li>
+      <li><button type="button" data-go="2"><span>El límite</span></button></li>
+      <li><button type="button" data-go="3"><span>La biblioteca</span></button></li>
+      <li><button type="button" data-go="4"><span>Entrar</span></button></li>
+    </ol>
+    <div class="hint" aria-hidden="true"><i></i>Desliza</div>
+    <div class="tbar" aria-hidden="true"><i id="tbar"></i></div>
+  </div>
+</section>
+
+<main>
+<!-- MARCA -->
+<section class="sec" id="marca">
+  <div class="wrap"><div class="brandblk">
+    <div>
+      <span class="eyebrow">Plataforma informativa</span>
+      <h2>Farmacología deportiva <span class="gothic">con rigor</span></h2>
+      <p class="lead">Un lugar para entender qué son los péptidos, los SARMs y los esteroides anabólico-androgénicos, qué dice la evidencia y cuál es su situación regulatoria. Escrito para quien empieza y revisable por quien sabe.</p>
+      <div class="row"><a class="btn btn-fire" href="#catalogo">Explorar fichas</a><a class="btn btn-ghost" href="#metodo">Ver cómo trabajamos</a></div>
+    </div>
+    <ul class="stats">
+      <li class="glassb"><b>3</b><span>Familias de compuestos</span></li>
+      <li class="glassb"><b>0</b><span>Dosis, ciclos o protocolos</span></li>
+      <li class="glassb"><b>9</b><span>Secciones por ficha</span></li>
+      <li class="glassb"><b>18+</b><span>Acceso para adultos</span></li>
+    </ul>
+  </div></div>
+</section>
+
+<!-- FAMILIAS -->
+<section class="sec" id="familias">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Familias</span><h2>Tres familias, <span class="gothic">una sola vara</span></h2><p class="lead">Todas se explican con el mismo método: qué son, cómo actúan, qué evidencia existe, qué riesgos tienen y cuál es su situación regulatoria.</p></div>
+    <div class="cols" id="cols"></div>
+  </div>
+</section>
+
+<!-- EVIDENCIA -->
+<section class="sec" id="evidencia">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Niveles de evidencia</span><h2>No todo estudio <span class="gothic">pesa igual</span></h2><p class="lead">Cada afirmación de una ficha lleva una etiqueta con el tipo de estudio que la respalda. Así se ve de un vistazo qué es sólido y qué es especulación.</p></div>
+    <div class="gamas" id="gamas"></div>
+  </div>
+</section>
+
+<!-- CATÁLOGO -->
+<section class="sec" id="catalogo">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Biblioteca de compuestos</span><h2>Fichas <span class="gothic">informativas</span></h2><p class="lead">Estas fichas son plantillas en revisión. La descripción general está escrita; la evidencia, los riesgos, la regulación y las referencias se completan con fuentes primarias antes de publicar.</p></div>
+    <div class="bar">
+      <label class="search"><span hidden>Buscar compuesto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input class="input" id="q" type="search" placeholder="Buscar compuesto" autocomplete="off"></label>
+      <div class="chips" id="chips" role="group" aria-label="Filtrar por familia"></div>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="note">Aparecen los compuestos mencionados en un catálogo comercial de referencia, pero aquí no se muestran precios, marcas ni enlaces de compra. Otros compuestos del ecosistema, como los moduladores de estrógenos, se evaluarán en una fase posterior.</p>
+  </div>
+</section>
+
+<!-- COMPARADOR -->
+<section class="sec" id="comparador">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Comparador informativo</span><h2>Familia <span class="gothic">frente a familia</span></h2><p class="lead">Una comparación de conceptos, no de productos. Las filas regulatorias están marcadas por verificar.</p></div>
+    <div class="tbl glassb"><table>
+      <thead><tr><th></th><th>Péptidos y hormonas</th><th>SARMs</th><th>Anabólicos androgénicos</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Qué son</th><td>Cadenas de aminoácidos y hormonas. Es una categoría muy heterogénea.</td><td>Moléculas diseñadas para activar el receptor de andrógenos de forma selectiva.</td><td>Hormonas y derivados sintéticos de la testosterona.</td></tr>
+        <tr><th scope="row">Cómo actúan</th><td>Depende del compuesto: receptores de incretinas, de hormona de crecimiento y otros.</td><td>Receptor de andrógenos, con la meta de afectar más a músculo y hueso que a otros tejidos.</td><td>Receptor de andrógenos en múltiples tejidos.</td></tr>
+        <tr><th scope="row">Evidencia</th><td><b>Variable</b><br>Algunos tienen ensayos clínicos amplios. Otros casi no tienen datos.</td><td><b>Limitada</b><br>Por verificar compuesto por compuesto.</td><td><b>Variable</b><br>Hay uso médico documentado y también datos limitados sobre uso fuera de indicación.</td></tr>
+        <tr><th scope="row">Situación en México</th><td><span class="pill warn">Por verificar</span></td><td><span class="pill warn">Por verificar</span></td><td><span class="pill warn">Por verificar</span></td></tr>
+        <tr><th scope="row">Antidopaje</th><td><span class="pill warn">Por verificar</span></td><td><span class="pill warn">Por verificar</span></td><td><span class="pill warn">Por verificar</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- MÉTODO -->
+<section class="sec" id="metodo">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Método y salud</span><h2>Cómo <span class="gothic">trabajamos</span></h2><p class="lead">Las reglas editoriales del sitio. Son públicas porque la confianza se construye mostrando el proceso.</p></div>
+    <div class="sci-tabs" id="sciTabs" role="tablist" aria-label="Reglas editoriales"></div>
+    <div id="sciPane" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- DIRECTORIO -->
+<section class="sec" id="directorio">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Directorio</span><h2>Profesionales <span class="gothic">verificados</span></h2><p class="lead">Si necesitas orientación individual, busca a un profesional de la salud. Aquí solo se publican perfiles que cumplen criterios comprobables.</p></div>
+    <div class="dir">
+      <div class="vault glassb">
+        <h3>Criterios de admisión</h3>
+        <ol>
+          <li>Cédula profesional vigente, verificada en el registro oficial.</li>
+          <li>Especialidad relacionada con medicina, endocrinología, nutrición o farmacia.</li>
+          <li>Establecimientos con licencia sanitaria comprobable, cuando aplique.</li>
+          <li>Sin promesas de resultados y sin venta de sustancias no autorizadas.</li>
+          <li>Criterios y motivos de baja publicados abiertamente.</li>
+        </ol>
+        <div class="dirstate">Todavía no hay perfiles publicados. El directorio se abre cuando exista el primer profesional verificado.</div>
+      </div>
+      <form class="form glassb" id="dirForm" novalidate>
+        <h3 style="font-size:1.8rem">Quiero que me listen</h3>
+        <div class="two">
+          <div class="field"><label for="dn">Nombre</label><input class="input" id="dn" required autocomplete="name"></div>
+          <div class="field"><label for="dp">Profesión</label><input class="input" id="dp" required></div>
+        </div>
+        <div class="two">
+          <div class="field"><label for="dc">Cédula profesional</label><input class="input" id="dc" required></div>
+          <div class="field"><label for="de">Correo</label><input class="input" id="de" type="email" required autocomplete="email"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="dk" required> Acepto que verifiquen mis datos y el aviso de privacidad.</label>
+        <p class="msg err" id="dErr" hidden>Completa todos los campos y acepta el aviso para continuar.</p>
+        <p class="msg" id="dOk" hidden>Solicitud registrada en esta vista previa. Aún no hay servidor conectado, así que no se envió nada.</p>
+        <button class="btn btn-fire" type="submit">Solicitar verificación</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Preguntas frecuentes</span><h2>Antes de <span class="gothic">preguntar</span></h2></div>
+    <div class="faq" id="faqList"></div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="sec" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta-band">
+      <div style="display:grid;gap:16px">
+        <span class="eyebrow">Colabora</span>
+        <h2>¿Eres revisor o <span class="gothic">investigador</span>?</h2>
+        <p class="lead">Buscamos farmacólogos, médicos y químicos que revisen fichas. También recibimos correcciones con fuente. No atendemos consultas comerciales ni de venta.</p>
+      </div>
+      <div class="cl-list">
+        <div><small>Correo editorial</small><b>Por definir</b></div>
+        <div><small>Correcciones</small><b>Se aceptan con cita a la fuente</b></div>
+        <div><small>Consultas de venta</small><b>No se atienden</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGAL -->
+<section class="sec" id="legal" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Avisos</span><h2>Información <span class="gothic">legal</span></h2></div>
+    <div class="faq">
+      <details><summary>Aviso legal (borrador)</summary><p>El contenido de este sitio es informativo y educativo. No constituye consejo médico, diagnóstico ni tratamiento, y no sustituye la consulta con un profesional de la salud. Este sitio no vende ni promueve la venta de sustancias. Este texto es un borrador y requiere revisión legal antes de publicarse.</p></details>
+      <details><summary>Aviso de privacidad (borrador)</summary><p>Solo se recopilan los datos indispensables en los formularios. No se solicitan datos de salud. Este texto es un borrador y debe ajustarse a la ley de protección de datos vigente con asesoría legal.</p></details>
+      <details><summary>Mayoría de edad</summary><p>El sitio está dirigido a personas de 18 años o más.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a class="brand" href="#inicio"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M9 4c0 9 22 9 22 16S9 29 9 36M31 4c0 9-22 9-22 16s22 7 22 16" stroke="#f0b552" stroke-width="2" stroke-linecap="round"/></svg><span><b>Tu Marca</b></span></a><p class="ash" style="margin-top:12px;max-width:34ch">Nombre y marca provisionales, pendientes de aprobación.</p></div>
+      <div><h4>Contenido</h4><ul><li><a href="#familias">Familias</a></li><li><a href="#evidencia">Evidencia</a></li><li><a href="#catalogo">Fichas</a></li><li><a href="#comparador">Comparador</a></li></ul></div>
+      <div><h4>Sitio</h4><ul><li><a href="#metodo">Método</a></li><li><a href="#directorio">Profesionales</a></li><li><a href="#faq">Preguntas</a></li><li><a href="#legal">Avisos legales</a></li></ul></div>
+    </div>
+    <p class="legal">Contenido informativo y educativo para mayores de 18 años. No sustituye la consulta con un profesional de la salud. Este sitio no vende ni intermedia la venta de ninguna sustancia. La situación regulatoria de cada compuesto está pendiente de verificación con fuentes oficiales.</p>
+  </div>
+</footer>
+
+<dialog class="qv" id="qv" aria-labelledby="qvT"><div class="qv-in" id="qvBody"></div></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+function $(s,r){return (r||document).querySelector(s)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- datos ---------- */
+var NOTICES=['Contenido informativo, no oferta comercial','Sin dosis, ciclos ni protocolos','Fuentes primarias citadas','Revisión experta en cada ficha','Solo mayores de 18 años','No vendemos sustancias'];
+$('#promo').innerHTML=NOTICES.concat(NOTICES).map(function(t){return '<span>'+t+'</span>'}).join('');
+
+var ICONS={
+ pep:'<svg viewBox="0 0 160 100" fill="none" aria-hidden="true"><path d="M10 70c20-50 30 40 50-10s30-40 50 0 30 30 40-20" stroke="#c8862a" stroke-width="3" stroke-linecap="round"/><g fill="#f0b552"><circle cx="18" cy="52" r="7"/><circle cx="46" cy="62" r="7"/><circle cx="74" cy="38" r="7"/><circle cx="102" cy="50" r="7"/><circle cx="130" cy="58" r="7"/></g><circle cx="74" cy="38" r="12" stroke="#ff5a1f" stroke-width="1.5"/></svg>',
+ sarm:'<svg viewBox="0 0 160 100" fill="none" aria-hidden="true"><path d="M50 22l22 13v26L50 74 28 61V35z" stroke="#f0b552" stroke-width="3" stroke-linejoin="round"/><path d="M72 35l22-13 22 13v26L94 74 72 61" stroke="#c8862a" stroke-width="3" stroke-linejoin="round"/><circle cx="130" cy="30" r="9" fill="#ff5a1f"/><path d="M116 61l14-22" stroke="#ff5a1f" stroke-width="2.5" stroke-linecap="round"/></svg>',
+ aas:'<svg viewBox="0 0 160 100" fill="none" aria-hidden="true"><path d="M26 34l20-11 20 11v23L46 68 26 57z" stroke="#f0b552" stroke-width="3" stroke-linejoin="round"/><path d="M66 34l20-11 20 11v23L86 68 66 57" stroke="#f0b552" stroke-width="3" stroke-linejoin="round"/><path d="M106 34l20-11 14 8-6 18-12 10-16-3" stroke="#c8862a" stroke-width="3" stroke-linejoin="round"/><path d="M140 31v-14M126 80v-12" stroke="#ff5a1f" stroke-width="3" stroke-linecap="round"/></svg>'
+};
+var FAM=[
+ {id:'Péptidos y hormonas',ic:'pep',t:'Péptidos y hormonas',d:'Desde medicamentos con ensayos amplios hasta compuestos casi sin datos.'},
+ {id:'SARMs',ic:'sarm',t:'SARMs',d:'Moduladores selectivos del receptor de andrógenos. Muchos siguen en investigación.'},
+ {id:'Anabólicos androgénicos',ic:'aas',t:'Anabólicos androgénicos',d:'Derivados de la testosterona, algunos con uso médico documentado.'}
+];
+var C=[
+ ['Testosterona','Anabólicos androgénicos','Hormona sexual androgénica principal. Existe como medicamento con indicaciones médicas.','Activa el receptor de andrógenos en múltiples tejidos.'],
+ ['Nandrolona','Anabólicos androgénicos','Esteroide anabólico derivado de la testosterona.','Activa el receptor de andrógenos.'],
+ ['Boldenona','Anabólicos androgénicos','Esteroide anabólico conocido sobre todo por su uso veterinario.','Activa el receptor de andrógenos.'],
+ ['Trembolona','Anabólicos androgénicos','Esteroide anabólico sintético, con uso veterinario en ganado.','Activa el receptor de andrógenos.'],
+ ['Estanozolol','Anabólicos androgénicos','Esteroide anabólico sintético derivado de la dihidrotestosterona.','Activa el receptor de andrógenos.'],
+ ['Oxandrolona','Anabólicos androgénicos','Esteroide anabólico oral sintético derivado de la dihidrotestosterona.','Activa el receptor de andrógenos.'],
+ ['Metandrostenolona','Anabólicos androgénicos','Esteroide anabólico oral sintético.','Activa el receptor de andrógenos.'],
+ ['Oximetolona','Anabólicos androgénicos','Esteroide anabólico oral sintético con uso médico documentado en ciertos tipos de anemia.','Activa el receptor de andrógenos.'],
+ ['Metenolona','Anabólicos androgénicos','Esteroide anabólico derivado de la dihidrotestosterona.','Activa el receptor de andrógenos.'],
+ ['Drostanolona','Anabólicos androgénicos','Esteroide androgénico derivado de la dihidrotestosterona.','Activa el receptor de andrógenos.'],
+ ['Mesterolona','Anabólicos androgénicos','Andrógeno oral derivado de la dihidrotestosterona.','Activa el receptor de andrógenos.'],
+ ['Testolone (RAD140)','SARMs','Modulador selectivo del receptor de andrógenos en investigación.','Diseñado para activar el receptor de andrógenos de forma selectiva por tejido.'],
+ ['Semaglutida','Péptidos y hormonas','Péptido agonista del receptor GLP-1.','Activa el receptor de GLP-1, una incretina.'],
+ ['Tirzepatida','Péptidos y hormonas','Péptido agonista dual de los receptores GIP y GLP-1.','Activa los receptores de GIP y de GLP-1.'],
+ ['Retatrutida','Péptidos y hormonas','Péptido que actúa sobre tres receptores (GIP, GLP-1 y glucagón). Su estado de desarrollo está por verificar.','Activa los receptores de GIP, GLP-1 y glucagón.'],
+ ['Somatropina','Péptidos y hormonas','Hormona de crecimiento humana, producida por tecnología recombinante.','Activa el receptor de hormona de crecimiento.'],
+ ['Péptidos secretagogos (GHRP, sermorelina, CJC-1295)','Péptidos y hormonas','Grupo de péptidos que estimulan la liberación de hormona de crecimiento. Es un grupo heterogéneo.','Actúan sobre los receptores de ghrelina o de GHRH para liberar hormona de crecimiento.'],
+ ['Gonadotropina coriónica humana','Péptidos y hormonas','Hormona que actúa sobre el receptor de LH.','Activa el receptor de LH/hCG.']
+];
+var LEV=[
+ {t:'Ensayos en humanos',m:4,d:'Estudios clínicos controlados. Es el nivel que más peso tiene, siempre que el diseño sea sólido.'},
+ {t:'Estudios en animales',m:2,d:'Sugieren mecanismos, pero lo que ocurre en un animal puede no repetirse en personas.'},
+ {t:'Estudios celulares',m:1,d:'Experimentos de laboratorio en células. Útiles para explorar hipótesis, no para sacar conclusiones clínicas.'},
+ {t:'Sin datos o anecdótico',m:0,d:'Testimonios y foros. No se usan como respaldo de ninguna afirmación.'}
+];
+var SCI=[
+ {n:'Fuentes',w:'Fuentes',h:'Cada afirmación lleva su cita',p:'Las fichas se basan en literatura primaria y fuentes oficiales. Si no hay fuente, no hay afirmación.',a:[['Etiqueta de evidencia','Ensayo en humanos, animal, celular o sin datos.'],['Hipótesis marcadas','Lo que no está demostrado se escribe como hipótesis, nunca como hecho.'],['Bibliografía abierta','Cada ficha termina con sus referencias para que las compruebes.']]},
+ {n:'Límites',w:'Límites',h:'Lo que nunca publicamos',p:'Hay contenido que el sitio no incluye, aunque se lo pidan.',a:[['Sin dosis','No hay dosificación de ningún compuesto.'],['Sin ciclos ni protocolos','Ni combinaciones, ni esquemas de administración.'],['Sin enlaces de compra','Las fichas no apuntan a tiendas ni proveedores.']]},
+ {n:'Revisión',w:'Revisión',h:'Autor, revisor y fecha',p:'Cada ficha muestra quién la escribió, quién la revisó y cuándo.',a:[['Revisor con credenciales','Un profesional de la salud o farmacología firma la revisión.'],['Fechas visibles','Se indica la última revisión y se actualiza en ciclos definidos.'],['Correcciones con fuente','Cualquier lector puede proponer una corrección citando su fuente.']]},
+ {n:'Salud',w:'Salud',h:'Riesgos y responsabilidad',p:'Estos compuestos pueden tener efectos adversos importantes. El sitio informa, no recomienda su uso.',a:[['Riesgos en cada ficha','Efectos adversos documentados, con su nivel de evidencia.'],['Antidopaje','Se indica la situación en las listas de sustancias prohibidas en el deporte.'],['Consulta profesional','Ante cualquier duda de salud, acude con un profesional.']]}
+];
+var FAQ=[
+ ['¿Aquí se venden estos compuestos?','No. El sitio es informativo. No vende, no intermedia ventas y no enlaza a tiendas.'],
+ ['¿Por qué no hay dosis?','Porque publicar dosificación de sustancias no aprobadas o de uso médico supervisado puede causar daño. Si necesitas orientación, consulta con un profesional.'],
+ ['¿Todo lo que aparece es legal?','No lo sabemos todavía y no lo damos por hecho. La situación regulatoria de cada compuesto está por verificar con fuentes oficiales.'],
+ ['¿Quién escribe las fichas?','Autores identificados y revisores con credenciales. Las fichas actuales son plantillas en revisión.'],
+ ['¿Puedo proponer una corrección?','Sí, siempre que cites una fuente verificable.']
+];
+
+/* ---------- render ---------- */
+function drawFam(){
+  var h='';FAM.forEach(function(f,i){var n=C.filter(function(c){return c[1]===f.id}).length;
+    h+='<button type="button" class="ctile glow" data-fam="'+esc(f.id)+'"><span class="ctile-n">'+String(n).padStart(2,'0')+'</span>'+ICONS[f.ic]+'<span><b>'+esc(f.t)+'</b><small>'+esc(f.d)+'</small></span><span class="ctile-go">Ver fichas <i>→</i></span></button>'});
+  $('#cols').innerHTML=h;
+}
+drawFam();
+$('#gamas').innerHTML=LEV.map(function(l){var s='';for(var i=0;i<4;i++)s+='<i'+(i<l.m?' class="on"':'')+'></i>';
+  return '<article class="gtile glassb"><small>Peso como respaldo</small><h3>'+esc(l.t)+'</h3><div class="meter" aria-hidden="true">'+s+'</div><p>'+esc(l.d)+'</p></article>'}).join('');
+
+var cur='Todos',qtxt='';
+var CH=['Todos'].concat(FAM.map(function(f){return f.id}));
+function drawCat(){
+  $('#chips').innerHTML=CH.map(function(c){return '<button type="button" class="chip" aria-pressed="'+(c===cur)+'" data-c="'+esc(c)+'">'+esc(c)+'</button>'}).join('');
+  var L=C.map(function(c,i){return {c:c,i:i}}).filter(function(o){return (cur==='Todos'||o.c[1]===cur)&&(!qtxt||o.c[0].toLowerCase().indexOf(qtxt)>-1)});
+  $('#count').textContent=L.length+' de '+C.length+' fichas';
+  $('#grid').innerHTML=L.length?L.map(function(o){return '<button type="button" class="pcard" data-i="'+o.i+'"><span class="cl">'+esc(o.c[1])+'</span><h3>'+esc(o.c[0])+'</h3><p>'+esc(o.c[2])+'</p><span class="pills"><span class="pill warn">Ficha en revisión</span><span class="pill fire">Regulación por verificar</span></span><span class="go">Abrir ficha →</span></button>'}).join(''):'<div class="empty" style="grid-column:1/-1">No hay fichas que coincidan con tu búsqueda.</div>';
+}
+drawCat();
+$('#chips').addEventListener('click',function(e){var b=e.target.closest('.chip');if(!b)return;cur=b.getAttribute('data-c');drawCat()});
+$('#q').addEventListener('input',function(){qtxt=this.value.trim().toLowerCase();drawCat()});
+$('#cols').addEventListener('click',function(e){var b=e.target.closest('.ctile');if(!b)return;cur=b.getAttribute('data-fam');drawCat();$('#catalogo').scrollIntoView({behavior:reduce?'auto':'smooth'})});
+
+/* ficha */
+var qv=$('#qv');
+var TABS=['Descripción','Mecanismo','Evidencia','Riesgos','Regulación','Referencias'];
+function openFicha(i){
+  var c=C[i];
+  var body={
+    'Descripción':'<p>'+esc(c[2])+'</p><p class="ash" style="margin-top:10px">Descripción general de la familia. Falta la revisión de un experto antes de publicarla.</p>',
+    'Mecanismo':'<p>'+esc(c[3])+'</p>',
+    'Evidencia':'<p><span class="draft">Pendiente</span>Se completará con revisión de literatura primaria (PubMed, ClinicalTrials.gov), indicando el nivel de evidencia de cada afirmación.</p>',
+    'Riesgos':'<p><span class="draft">Pendiente</span>Se documentarán los efectos adversos reportados con su fuente. Mientras tanto: el uso sin supervisión médica conlleva riesgos. Consulta con un profesional de la salud.</p>',
+    'Regulación':'<p><span class="draft">Por verificar</span>La situación en México se confirmará con fuentes oficiales (COFEPRIS, Ley General de Salud). No se asume que sea legal ni ilegal.</p>',
+    'Referencias':'<p><span class="draft">Sin publicar</span>Esta ficha todavía no tiene referencias. No se publicará como definitiva hasta tenerlas.</p>'
+  };
+  $('#qvBody').innerHTML='<button class="qv-x" type="button" id="qvX" aria-label="Cerrar ficha">✕</button><span class="eyebrow">'+esc(c[1])+'</span><h3 id="qvT">'+esc(c[0])+'</h3><div class="tabs" role="tablist">'+TABS.map(function(t,k){return '<button type="button" role="tab" data-t="'+t+'" aria-selected="'+(k===0)+'">'+t+'</button>'}).join('')+'</div><div class="tabbody" id="tbody" role="tabpanel">'+body['Descripción']+'</div><p class="ash" style="font-size:.88rem">Este sitio no vende este compuesto. Contenido informativo para mayores de 18 años.</p>';
+  $('#qvBody').onclick=function(e){
+    var t=e.target.closest('[data-t]');
+    if(t){[].forEach.call($('#qvBody').querySelectorAll('[data-t]'),function(b){b.setAttribute('aria-selected',b===t?'true':'false')});$('#tbody').innerHTML=body[t.getAttribute('data-t')]}
+    if(e.target.id==='qvX')closeQv();
+  };
+  if(qv.showModal)qv.showModal();else qv.setAttribute('open','');
+}
+function closeQv(){if(qv.close)qv.close();else qv.removeAttribute('open')}
+qv.addEventListener('click',function(e){if(e.target===qv)closeQv()});
+$('#grid').addEventListener('click',function(e){var b=e.target.closest('.pcard');if(b)openFicha(+b.getAttribute('data-i'))});
+
+/* método */
+var sci=0;
+function drawSci(){
+  $('#sciTabs').innerHTML=SCI.map(function(s,i){return '<button type="button" role="tab" aria-selected="'+(i===sci)+'" data-i="'+i+'"><span class="num">'+(i+1)+'</span>'+esc(s.n)+'</button>'}).join('');
+  var s=SCI[sci];
+  $('#sciPane').innerHTML='<div class="sci-hero"><div class="sci-word">'+esc(s.w)+'</div><div><h3>'+esc(s.h)+'</h3><p>'+esc(s.p)+'</p></div></div><div class="sci-grid">'+s.a.map(function(a){return '<article><h4>'+esc(a[0])+'</h4><p>'+esc(a[1])+'</p></article>'}).join('')+'</div>';
+}
+drawSci();
+$('#sciTabs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;sci=+b.getAttribute('data-i');drawSci()});
+
+$('#faqList').innerHTML=FAQ.map(function(f,i){return '<details'+(i===0?' open':'')+'><summary>'+esc(f[0])+'</summary><p>'+esc(f[1])+'</p></details>'}).join('');
+
+/* formulario */
+$('#dirForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var ok=['dn','dp','dc','de'].every(function(id){return $('#'+id).value.trim()})&&$('#de').validity.valid&&$('#dk').checked;
+  $('#dErr').hidden=ok;$('#dOk').hidden=!ok;
+  if(ok)this.reset();
+});
+
+/* menú móvil */
+$('#menuBtn').addEventListener('click',function(){$('#mnav').hidden=false;this.setAttribute('aria-expanded','true')});
+function closeMenu(){$('#mnav').hidden=true;$('#menuBtn').setAttribute('aria-expanded','false')}
+$('#menuClose').addEventListener('click',closeMenu);
+$('#mnav').addEventListener('click',function(e){if(e.target.tagName==='A')closeMenu()});
+
+/* brillo del cursor y inclinación */
+var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+document.addEventListener('pointermove',function(e){
+  var el=e.target.closest&&e.target.closest('.glow,.pcard');if(!el)return;
+  var r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px');
+  if(fine&&!reduce&&el.classList.contains('ctile')){var px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;el.style.transform='perspective(900px) rotateX('+(-py*6).toFixed(2)+'deg) rotateY('+(px*6).toFixed(2)+'deg)'}
+});
+document.addEventListener('pointerout',function(e){var el=e.target.closest&&e.target.closest('.ctile');if(el)el.style.transform=''});
+
+/* ---------- recorrido 3D ---------- */
+var tour=$('#inicio'),chaps=[].slice.call(document.querySelectorAll('.chap')),railB=[].slice.call(document.querySelectorAll('#rail button')),tbar=$('#tbar');
+function tourP(){var r=tour.offsetHeight-innerHeight;return r>0?Math.max(0,Math.min(1,(window.scrollY-tour.offsetTop)/r)):0}
+function goChap(i){var r=tour.offsetHeight-innerHeight;window.scrollTo({top:tour.offsetTop+(i+.5)/5*r,behavior:reduce?'auto':'smooth'})}
+$('#rail').addEventListener('click',function(e){var b=e.target.closest('button');if(b)goChap(+b.getAttribute('data-go'))});
+$('#skipIntro').addEventListener('click',function(){$('#marca').scrollIntoView({behavior:reduce?'auto':'smooth'})});
+var lastIdx=-1;
+function ui(p){
+  var idx=Math.min(4,Math.floor(p*5));
+  if(idx!==lastIdx){lastIdx=idx;chaps.forEach(function(c,i){c.classList.toggle('on',i===idx)});railB.forEach(function(b,i){b.classList.toggle('on',i===idx)})}
+  tbar.style.transform='scaleX('+p.toFixed(3)+')';
+  tour.classList.toggle('moved',window.scrollY>40);
+}
+var gl3d=(function(){
+  var canvas=$('#tourCanvas');
+  try{
+    if(!window.THREE)throw new Error('three');
+    var T=THREE,renderer=new T.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,innerWidth<700?1.5:2));
+    renderer.setClearColor(0x000000,0);
+    var scene=new T.Scene();scene.fog=new T.Fog(0x070504,14,48);
+    var cam=new T.PerspectiveCamera(50,1,.1,100);
+    scene.add(new T.AmbientLight(0x4a3322,.9));
+    var l1=new T.PointLight(0xff5a1f,2.2,40);l1.position.set(4,3,6);scene.add(l1);
+    var l2=new T.PointLight(0xf0b552,1.6,40);l2.position.set(-5,-3,5);scene.add(l2);
+    var world=new T.Group();scene.add(world);
+    /* doble hélice de oro y brasa */
+    var N=120,H=9,beadG=new T.SphereGeometry(.17,12,10);
+    var mA=new T.InstancedMesh(beadG,new T.MeshPhongMaterial({color:0xc8862a,emissive:0x6a3d0a,shininess:90,specular:0xffe0a0}),N);
+    var mB=new T.InstancedMesh(beadG,new T.MeshPhongMaterial({color:0xff5a1f,emissive:0x8a2a08,shininess:90,specular:0xffb080}),N);
+    var d=new T.Object3D(),rp=[],R=2.1;
+    for(var i=0;i<N;i++){var y=-H+i*(2*H/(N-1)),a=y*.85;
+      d.position.set(Math.cos(a)*R,y,Math.sin(a)*R);d.updateMatrix();mA.setMatrixAt(i,d.matrix);
+      d.position.set(-Math.cos(a)*R,y,-Math.sin(a)*R);d.updateMatrix();mB.setMatrixAt(i,d.matrix);
+      if(i%4===0)rp.push(Math.cos(a)*R,y,Math.sin(a)*R,-Math.cos(a)*R,y,-Math.sin(a)*R)}
+    var rg=new T.BufferGeometry();rg.setAttribute('position',new T.Float32BufferAttribute(rp,3));
+    var helix=new T.Group();helix.add(mA,mB,new T.LineSegments(rg,new T.LineBasicMaterial({color:0xf0b552,transparent:true,opacity:.35})));
+    world.add(helix);
+    /* anillos orbitales */
+    var rings=[];[3.6,4.6,5.8].forEach(function(r,i){
+      var m=new T.Mesh(new T.TorusGeometry(r,.025,8,120),new T.MeshBasicMaterial({color:i===1?0xff5a1f:0xf0b552,transparent:true,opacity:.55}));
+      m.rotation.set(Math.PI/2+i*.35,i*.5,0);m.userData.s=.12+i*.05;world.add(m);rings.push(m)});
+    /* péptido flotante */
+    var pts=[];for(var k=0;k<14;k++){var aa=k*.95;pts.push(new T.Vector3(Math.cos(aa)*.9,(k-7)*.32,Math.sin(aa)*.9))}
+    var pep=new T.Group();
+    pep.add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),90,.04,6,false),new T.MeshPhongMaterial({color:0xefe6d6,transparent:true,opacity:.7})));
+    pts.forEach(function(p,k){var b=new T.Mesh(new T.SphereGeometry(.17,12,10),new T.MeshPhongMaterial({color:k%2?0xf0b552:0xff5a1f,emissive:0x4a1a05}));b.position.copy(p);pep.add(b)});
+    pep.position.set(-6,1.5,-2);pep.rotation.z=.4;world.add(pep);
+    /* brasas */
+    var EM=420,ep=new Float32Array(EM*3),es=[];
+    for(var e=0;e<EM;e++){ep[e*3]=(Math.random()-.5)*26;ep[e*3+1]=(Math.random()-.5)*20;ep[e*3+2]=(Math.random()-.5)*20;es.push(.15+Math.random()*.5)}
+    var eg=new T.BufferGeometry();eg.setAttribute('position',new T.BufferAttribute(ep,3));
+    var emb=new T.Points(eg,new T.PointsMaterial({color:0xff7a3a,size:.09,transparent:true,opacity:.85,blending:T.AdditiveBlending,depthWrite:false}));
+    scene.add(emb);
+    /* cámara: un plano por capítulo */
+    var KF=[{p:[0,1,17],l:[0,0,0]},{p:[8,3,10],l:[0,2,0]},{p:[0,13,8],l:[0,0,0]},{p:[-9,-2,9],l:[0,-1,0]},{p:[0,0,21],l:[0,0,0]}];
+    var cp=new T.Vector3(),cl=new T.Vector3(),mouse={x:0,y:0},cm={x:0,y:0},cur=0;
+    function sm(t){return t*t*(3-2*t)}
+    function size(){var w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();world.position.x=w>960?3.4:0}
+    size();window.addEventListener('resize',size);
+    if(fine&&!reduce)window.addEventListener('pointermove',function(e){mouse.x=e.clientX/innerWidth-.5;mouse.y=e.clientY/innerHeight-.5},{passive:true});
+    var t0=performance.now(),vis=true;
+    new IntersectionObserver(function(en){vis=en[0].isIntersecting}).observe(tour);
+    function frame(now){
+      requestAnimationFrame(frame);
+      var p=tourP();ui(p);
+      if(document.hidden||!vis)return;
+      var dt=Math.min((now-t0)/1000,.05);t0=now;
+      cur+=(p-cur)*(reduce?1:.07);
+      var f=cur*4,i=Math.min(3,Math.floor(f)),u=sm(f-i);
+      cp.set(0,0,0);cl.set(0,0,0);
+      ['x','y','z'].forEach(function(ax,k){cp[ax]=KF[i].p[k]+(KF[i+1].p[k]-KF[i].p[k])*u;cl[ax]=KF[i].l[k]+(KF[i+1].l[k]-KF[i].l[k])*u});
+      cm.x+=(mouse.x-cm.x)*.05;cm.y+=(mouse.y-cm.y)*.05;
+      cam.position.set(cp.x+cm.x*2,cp.y-cm.y*1.4,cp.z);
+      cam.lookAt(cl.x+world.position.x*.5,cl.y,cl.z);
+      if(!reduce){helix.rotation.y+=dt*.25;pep.rotation.y+=dt*.5;rings.forEach(function(r){r.rotation.z+=dt*r.userData.s});
+        for(var e=0;e<EM;e++){ep[e*3+1]+=es[e]*dt;if(ep[e*3+1]>10)ep[e*3+1]=-10}eg.attributes.position.needsUpdate=true}
+      renderer.render(scene,cam);
+    }
+    requestAnimationFrame(frame);
+    tour.classList.add('gl-on');
+    return true;
+  }catch(err){return false}
+})();
+if(!gl3d){(function loop(){ui(tourP());requestAnimationFrame(loop)})()}
+</script>
